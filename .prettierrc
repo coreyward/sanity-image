@@ -1,0 +1,4 @@
+semi: false
+trailingComma: "es5"
+proseWrap: "always"
+endOfLine: "lf"
