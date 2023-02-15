@@ -1,0 +1,47 @@
+{
+  "name": "sanity-image",
+  "version": "0.1.0",
+  "author": "Corey Ward <corey@hey.com>",
+  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/mjs/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/mjs/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "/dist"
+  ],
+  "dependencies": {
+    "@sanity/image-url": "^1.0.2"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.13.0",
+    "@types/react": "^18.0.28",
+    "esbuild": "^0.17.8",
+    "eslint": "^8.34.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.8.4",
+    "react": "^18.2.0",
+    "rimraf": "^4.1.2",
+    "typescript": "^4.9.5"
+  },
+  "scripts": {
+    "build": "rimraf dist && node ./scripts/build.js && tsc",
+    "postbuild": "./scripts/postbuild.sh"
+  }
+}
