@@ -100,7 +100,7 @@ export const SanityImage = <T extends ElementType = "img">({
 
   const componentProps: ComponentPropsWithoutRef<typeof Image> = {
     ...props,
-    loading: "lazy",
+    loading: props.loading ?? "lazy",
     src: source,
     srcSet: sourceSet,
     style: {
