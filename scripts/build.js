@@ -1,6 +1,6 @@
 const esbuild = require("esbuild")
 
-const sharedCofig = {
+const sharedConfig = {
   entryPoints: ["src/index.ts"],
   external: ["react", "@sanity/image-url"],
   bundle: true,
@@ -11,7 +11,7 @@ const sharedCofig = {
 // Build CommonJS version
 esbuild
   .build({
-    ...sharedCofig,
+    ...sharedConfig,
     format: "cjs",
     platform: "node",
     target: ["node12"],
@@ -22,7 +22,7 @@ esbuild
 // Build ES modules version
 esbuild
   .build({
-    ...sharedCofig,
+    ...sharedConfig,
     format: "esm",
     target: ["es2020"],
     splitting: true,
