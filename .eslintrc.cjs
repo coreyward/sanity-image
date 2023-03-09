@@ -10,6 +10,7 @@ module.exports = {
   ],
   plugins: ["react", "react-hooks", "prettier", "@typescript-eslint"],
   rules: {
+    "prettier/prettier": "warn",
     "no-use-before-define": "off",
     "no-unused-vars": "warn",
     "react/prop-types": "warn",
