@@ -176,3 +176,57 @@ export type ImageBuilderParameters = {
   width?: number
   withOptions?: Partial<ImageUrlBuilderOptionsWithAliases>
 }
+
+export type ImageQueryParams = {
+  /**
+   * Enables support for serving alternate image formats to supporting browsers
+   **/
+  auto: "format"
+
+  /**
+   * SanityImage `cover` mode → `fit=crop`; SanityImage `contain` mode → `fit=max`
+   */
+  fit: "crop" | "max"
+
+  /**
+   * Focal point (x) between 0 and 1. For non-terminal decimal values, use a string rounded to 3 decimal places.
+   */
+  "fp-x"?: number | string
+  /**
+   * Focal point (x) between 0 and 1. For non-terminal decimal values, use a string rounded to 3 decimal places.
+   */
+  "fp-y"?: number | string
+
+  /**
+   * Rect string in the format `x,y,w,h` where `x` and `y` are the top-left corner of the crop, and `w` and `h` are the width and height of the crop. Pixel values.
+   */
+  rect?: string
+
+  /**
+   * Width of the image in pixels
+   */
+  w: number
+
+  /**
+   * Height of the image in pixels
+   */
+  h?: number
+
+  /**
+   * This tells the Sanity Image API to focus on the most interesting part of the image when cropping. Only used if no hotspot is provided and the image is being cropped.
+   */
+  crop?: "entropy"
+
+  /**
+   * Quality of the image from 0 to 100. Defaults to 75.
+   */
+  q: number
+
+  /**
+   * Image query param metadata for testing and diagnostic purposes.
+   */
+  metadata?: {
+    sourceDimensions: { width: number; height: number; aspectRatio: number }
+    outputDimensions: { width: number; height: number; aspectRatio: number }
+  }
+}
