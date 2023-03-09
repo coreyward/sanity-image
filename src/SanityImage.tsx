@@ -4,7 +4,7 @@ import React, {
   type ComponentPropsWithoutRef,
 } from "react"
 import { Asset, PolymorphicComponentProp, SanityImageProps } from "./types"
-import { parseImageRef } from "./parseImageRef"
+import { parseImageId } from "./parseImageId"
 import { buildSource, buildSourceSet, imageUrl } from "./imageUrls"
 import { ImageWithPreview } from "./ImageWithPreview"
 
@@ -51,7 +51,7 @@ export const SanityImage = <T extends ElementType = "img">({
   }
 
   // Short circuit for SVG images
-  if (parseImageRef(image._id).format === "svg") {
+  if (parseImageId(image._id).format === "svg") {
     return <ImageComponent src={imageUrl(image, builder)} {...props} />
   }
 
@@ -68,7 +68,7 @@ export const SanityImage = <T extends ElementType = "img">({
     // Note: No attempts are made to compensate for the `fit` mode or
     // image params that transform the final output dimensions in this
     // early proof-of-concept version.
-    const { dimensions } = parseImageRef(image._id)
+    const { dimensions } = parseImageId(image._id)
 
     // Short circuit if both width and height are set. This will result
     // in the final aspect ratio matching the aspect ration of the

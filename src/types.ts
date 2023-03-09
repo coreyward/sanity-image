@@ -132,9 +132,13 @@ export type Asset = {
   metadata?: AssetMetadata
 }
 
-export type ImageRefParts = {
+export type ImageIdParts = {
   assetId: string
-  dimensions: { height: number; width: number }
+  dimensions: {
+    height: number
+    width: number
+    aspectRatio: number
+  }
   format: string
 }
 

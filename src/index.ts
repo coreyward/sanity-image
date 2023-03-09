@@ -1,5 +1,5 @@
 export { createBuilder } from "./builder"
 export { imageUrl, buildSource, buildSourceSet } from "./imageUrls"
 export { ImageWithPreview } from "./ImageWithPreview"
-export { parseImageRef } from "./parseImageRef"
+export { parseImageId } from "./parseImageId"
 export { SanityImage } from "./SanityImage"

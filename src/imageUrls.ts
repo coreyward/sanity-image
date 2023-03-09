@@ -1,5 +1,5 @@
 import { type ImageUrlBuilder } from "@sanity/image-url/lib/types/builder"
-import { parseImageRef } from "./parseImageRef"
+import { parseImageId } from "./parseImageId"
 import { Asset, ImageBuilderParameter, ImageBuilderParameters } from "./types"
 
 export const DEFAULT_IMAGE_CONFIG: ImageBuilderParameters = {
@@ -17,7 +17,7 @@ export const buildSource = (
   builder: ImageUrlBuilder,
   { width, height, ...config }: ImageBuilderParameters
 ): string => {
-  const { dimensions } = parseImageRef(asset._id)
+  const { dimensions } = parseImageId(asset._id)
 
   const origRatio = dimensions.width / dimensions.height
   width = width || dimensions.width
@@ -44,7 +44,7 @@ export const buildSourceSet = (
   builder: ImageUrlBuilder,
   config: ImageBuilderParameters
 ): string => {
-  const { dimensions } = parseImageRef(asset._id)
+  const { dimensions } = parseImageId(asset._id)
   const fitMode = config.fit ?? DEFAULT_IMAGE_CONFIG.fit
 
   // Determine dimensions and ratios for srcSet calculations
