@@ -1,5 +1,67 @@
 import { parseImageId } from "./parseImageId"
-import type { CropData, ImageIdParts, ImageQueryParams } from "types"
+import type {
+  CropData,
+  ImageIdParts,
+  ImageQueryInputs,
+  ImageQueryParams,
+} from "types"
+
+export const buildSrcSet = ({
+  id,
+  mode = "contain",
+  width,
+  height,
+  hotspot,
+  crop,
+  baseUrl,
+}: ImageQueryInputs & { baseUrl: string }) => {
+  // Determine base computed width
+  const { w } = buildQueryParams({ id, mode, width, height, hotspot, crop })
+
+  // Build srcset
+  const srcSetEntries = dynamicMultipliers(w)
+    .map((multiple) => {
+      const computedWidth = Math.round(w * multiple)
+      const computedHeight = height && Math.round(height * multiple)
+
+      // Ignore tiny entries; the extra data in the HTML is almost never worth it
+      if (multiple < 1 && computedWidth < 50) return null
+
+      const params: Omit<ImageQueryParams, "metadata"> = buildQueryParams({
+        id,
+        mode,
+        width: computedWidth,
+        height: computedHeight,
+        hotspot,
+        crop,
+      })
+
+      return `${baseUrl}?${buildQueryString(params)} ${params.w}w`
+    })
+    .filter(Boolean)
+
+  return Array.from(new Set(srcSetEntries))
+}
+
+const dynamicMultipliers = (width: number) => {
+  // For really small images, use larger steps
+  if (width < 160) {
+    return [0.5, 1, 2]
+  }
+
+  // For typical width images, use standard steps
+  if (width < 750) {
+    return [0.5, 1, 1.5, 2]
+  }
+
+  // For larger images, include 0.25x and 0.75x steps
+  if (width < 1400) {
+    return [0.25, 0.5, 0.75, 1, 1.5, 2]
+  }
+
+  // For really large images, use a wider range of steps at the low end, and smaller steps at the high end
+  return [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
+}
 
 /**
  * Constructs a query parameters object for the Sanity image URL based on the inputs provided.
@@ -12,29 +74,7 @@ export const buildQueryParams = ({
   hotspot,
   crop,
   options: { includeMetadata = false } = {},
-}: {
-  /** The Sanity Image ID (`_id` or `_ref` field value) */
-  id: string
-
-  /**
-   * Use `cover` to crop the image to match the requested aspect ratio (based on `width` and `height`).
-   * Use `contain` to fit the image to the boundaries provided without altering the aspect ratio.
-   * @default "contain"
-   */
-  mode?: "cover" | "contain"
-
-  /** The target width of the image in pixels. */
-  width?: number
-
-  /** The target height of the image in pixels. */
-  height?: number
-
-  /** The hotspot coordinates to use for the image. Note: hotspot `width` and `height` are not used. */
-  hotspot?: { x: number; y: number }
-
-  /** The crop coordinates to use for the image. */
-  crop?: CropData
-
+}: ImageQueryInputs & {
   options?: {
     /** Include data about the image in the response */
     includeMetadata?: boolean

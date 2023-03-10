@@ -94,16 +94,14 @@ export type ImageWithPreviewProps<T extends React.ElementType> = {
 } & AsProp<T> &
   React.ComponentPropsWithRef<T>
 
-type CropData = {
+export type CropData = {
   bottom: number
   left: number
   right: number
   top: number
 }
 
-type HotspotData = {
-  height: number
-  width: number
+export type HotspotData = {
   x: number
   y: number
 }
@@ -175,6 +173,30 @@ export type ImageBuilderParameters = {
   size?: [number, number]
   width?: number
   withOptions?: Partial<ImageUrlBuilderOptionsWithAliases>
+}
+
+export type ImageQueryInputs = {
+  /** The Sanity Image ID (`_id` or `_ref` field value) */
+  id: string
+
+  /**
+   * Use `cover` to crop the image to match the requested aspect ratio (based on `width` and `height`).
+   * Use `contain` to fit the image to the boundaries provided without altering the aspect ratio.
+   * @default "contain"
+   */
+  mode?: "cover" | "contain"
+
+  /** The target width of the image in pixels. */
+  width?: number
+
+  /** The target height of the image in pixels. */
+  height?: number
+
+  /** The hotspot coordinates to use for the image. Note: hotspot `width` and `height` are not used. */
+  hotspot?: { x: number; y: number }
+
+  /** The crop coordinates to use for the image. */
+  crop?: CropData
 }
 
 export type ImageQueryParams = {
