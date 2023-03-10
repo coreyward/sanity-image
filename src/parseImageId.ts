@@ -30,3 +30,22 @@ export const parseImageId = (id: string): ImageIdParts => {
     format,
   }
 }
+
+/**
+ * Convert an image id to a URL path segment for the Sanity Image API. Input is
+ * not validated.
+ *
+ * @example
+ * imageIdToUrlPath("image-<hash>-<width>x<height>-<ext>")
+ * //                  => "<hash>-<width>x<height>.<ext>"
+ */
+export const imageIdToUrlPath = (id: string): string => {
+  // This can be implemented with `parseImageId` but it's more computationally expensive
+  // than this more naive implementation.
+
+  const formatSeparatorIndex = id.lastIndexOf("-")
+
+  return (
+    id.slice(6, formatSeparatorIndex) + "." + id.slice(formatSeparatorIndex + 1)
+  )
+}
