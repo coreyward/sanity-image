@@ -180,8 +180,9 @@ export type ImageQueryInputs = {
   id: string
 
   /**
-   * Use `cover` to crop the image to match the requested aspect ratio (based on `width` and `height`).
-   * Use `contain` to fit the image to the boundaries provided without altering the aspect ratio.
+   * Use `cover` to crop the image to match the requested aspect ratio (based on
+   * `width` and `height`). Use `contain` to fit the image to the boundaries
+   * provided without altering the aspect ratio.
    * @default "contain"
    */
   mode?: "cover" | "contain"
@@ -192,12 +193,15 @@ export type ImageQueryInputs = {
   /** The target height of the image in pixels. */
   height?: number
 
-  /** The hotspot coordinates to use for the image. Note: hotspot `width` and `height` are not used. */
+  /** The hotspot coordinates to use for the image. Note: hotspot `width` and
+   * `height` are not used. */
   hotspot?: { x: number; y: number }
 
   /** The crop coordinates to use for the image. */
   crop?: CropData
 }
+
+export type ImageSrcInputs = ImageQueryInputs & { baseUrl: string }
 
 export type ImageQueryParams = {
   /**
@@ -206,21 +210,26 @@ export type ImageQueryParams = {
   auto: "format"
 
   /**
-   * SanityImage `cover` mode → `fit=crop`; SanityImage `contain` mode → `fit=max`
+   * SanityImage `cover` mode → `fit=crop`; SanityImage `contain` mode →
+   * `fit=max`
    */
   fit: "crop" | "max"
 
   /**
-   * Focal point (x) between 0 and 1. For non-terminal decimal values, use a string rounded to 3 decimal places.
+   * Focal point (x) between 0 and 1. For non-terminal decimal values, use a
+   * string rounded to 3 decimal places.
    */
   "fp-x"?: number | string
   /**
-   * Focal point (x) between 0 and 1. For non-terminal decimal values, use a string rounded to 3 decimal places.
+   * Focal point (x) between 0 and 1. For non-terminal decimal values, use a
+   * string rounded to 3 decimal places.
    */
   "fp-y"?: number | string
 
   /**
-   * Rect string in the format `x,y,w,h` where `x` and `y` are the top-left corner of the crop, and `w` and `h` are the width and height of the crop. Pixel values.
+   * Rect string in the format `x,y,w,h` where `x` and `y` are the top-left
+   * corner of the crop, and `w` and `h` are the width and height of the crop.
+   * Pixel values.
    */
   rect?: string
 
@@ -235,7 +244,9 @@ export type ImageQueryParams = {
   h?: number
 
   /**
-   * This tells the Sanity Image API to focus on the most interesting part of the image when cropping. Only used if no hotspot is provided and the image is being cropped.
+   * This tells the Sanity Image API to focus on the most interesting part of
+   * the image when cropping. Only used if no hotspot is provided and the image
+   * is being cropped.
    */
   crop?: "entropy"
 
@@ -251,4 +262,21 @@ export type ImageQueryParams = {
     sourceDimensions: { width: number; height: number; aspectRatio: number }
     outputDimensions: { width: number; height: number; aspectRatio: number }
   }
+}
+
+export type ComputedImageData = {
+  /**
+   * Full URL to the image
+   */
+  src: string
+
+  /**
+   * Actual output width of the image in pixels
+   */
+  width: number
+
+  /**
+   * Actual output height of the image in pixels
+   */
+  height: number
 }

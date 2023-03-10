@@ -1,10 +1,38 @@
-import { parseImageId } from "./parseImageId"
+import { imageIdToUrlPath, parseImageId } from "./parseImageId"
 import type {
+  ComputedImageData,
   CropData,
   ImageIdParts,
   ImageQueryInputs,
   ImageQueryParams,
+  ImageSrcInputs,
 } from "types"
+
+/**
+ * Convert ImageSrcInputs into a full image URL and computed output dimensions.
+ */
+export const buildSrc = ({
+  baseUrl,
+  ...inputParams
+}: ImageSrcInputs): ComputedImageData => {
+  const { metadata, ...queryParams } = buildQueryParams({
+    ...inputParams,
+    options: { includeMetadata: true },
+  })
+
+  // Narrowing for TS
+  if (!metadata) {
+    throw new Error("Missing image output metadata")
+  }
+
+  const imageUrl = `${baseUrl}${imageIdToUrlPath(inputParams.id)}`
+
+  return {
+    src: `${imageUrl}?${buildQueryString(queryParams)}`,
+    width: metadata.outputDimensions.width,
+    height: metadata.outputDimensions.height,
+  }
+}
 
 export const buildSrcSet = ({
   id,
@@ -14,9 +42,12 @@ export const buildSrcSet = ({
   hotspot,
   crop,
   baseUrl,
-}: ImageQueryInputs & { baseUrl: string }) => {
+}: ImageSrcInputs) => {
   // Determine base computed width
   const { w } = buildQueryParams({ id, mode, width, height, hotspot, crop })
+
+  // URL of the image without any query parameters
+  const imageUrl = `${baseUrl}${imageIdToUrlPath(id)}`
 
   // Build srcset
   const srcSetEntries = dynamicMultipliers(w)
@@ -36,7 +67,7 @@ export const buildSrcSet = ({
         crop,
       })
 
-      return `${baseUrl}?${buildQueryString(params)} ${params.w}w`
+      return `${imageUrl}?${buildQueryString(params)} ${params.w}w`
     })
     .filter(Boolean)
 
@@ -175,7 +206,6 @@ export const buildQueryParams = ({
     params.fit = "max"
   }
 
-  // This is for testing and diagnostic purposes
   if (includeMetadata) {
     // Height will be set if the aspect ratio varies from `sourceAspectRatio`
     const outputHeight = height || Math.round(width / sourceAspectRatio)

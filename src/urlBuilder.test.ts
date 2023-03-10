@@ -5,6 +5,7 @@ import {
   buildQueryString,
   buildRect,
   croppedImageSize,
+  buildSrc,
 } from "./urlBuilder"
 
 const image = {
@@ -23,46 +24,59 @@ const image = {
   },
 }
 
+describe("buildSrc", () => {
+  // Returns metadata as well as single `src` url
+  it("builds a src with metadata", () => {
+    expect(
+      buildSrc({ id: image.asset._id, width: 500, baseUrl: "/images/" })
+    ).toEqual({
+      src: "/images/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=500",
+      width: 500,
+      height: 500,
+    })
+  })
+})
+
 describe("buildSrcSet", () => {
-  const baseUrl = "/image"
+  const baseUrl = "/image/"
 
   it("generates a default srcset for mid-size images", () => {
     expect(buildSrcSet({ id: image.asset._id, width: 500, baseUrl })).toEqual([
-      "/image?auto=format&fit=max&q=75&w=250 250w",
-      "/image?auto=format&fit=max&q=75&w=500 500w",
-      "/image?auto=format&fit=max&q=75&w=750 750w",
-      "/image?auto=format&fit=max&q=75&w=1000 1000w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=250 250w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=500 500w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=750 750w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=1000 1000w",
     ])
   })
 
   it("doesn't scale up images", () => {
     expect(buildSrcSet({ id: image.asset._id, width: 1000, baseUrl })).toEqual([
-      "/image?auto=format&fit=max&q=75&w=250 250w",
-      "/image?auto=format&fit=max&q=75&w=500 500w",
-      "/image?auto=format&fit=max&q=75&w=750 750w",
-      "/image?auto=format&fit=max&q=75&w=1000 1000w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=250 250w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=500 500w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=750 750w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=1000 1000w",
     ])
 
     expect(buildSrcSet({ id: image.asset._id, width: 2000, baseUrl })).toEqual([
-      "/image?auto=format&fit=max&q=75&w=250 250w",
-      "/image?auto=format&fit=max&q=75&w=500 500w",
-      "/image?auto=format&fit=max&q=75&w=750 750w",
-      "/image?auto=format&fit=max&q=75&w=1000 1000w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=250 250w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=500 500w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=750 750w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=1000 1000w",
     ])
   })
 
   it("generates a smaller set for small images", () => {
     expect(buildSrcSet({ id: image.asset._id, width: 100, baseUrl })).toEqual([
-      "/image?auto=format&fit=max&q=75&w=50 50w",
-      "/image?auto=format&fit=max&q=75&w=100 100w",
-      "/image?auto=format&fit=max&q=75&w=200 200w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=50 50w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=100 100w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=200 200w",
     ])
   })
 
   it("skips tiny variants", () => {
     expect(buildSrcSet({ id: image.asset._id, width: 60, baseUrl })).toEqual([
-      "/image?auto=format&fit=max&q=75&w=60 60w",
-      "/image?auto=format&fit=max&q=75&w=120 120w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=60 60w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=120 120w",
     ])
   })
 
@@ -74,14 +88,14 @@ describe("buildSrcSet", () => {
         baseUrl,
       })
     ).toEqual([
-      "/image?auto=format&fit=max&q=75&w=500 500w",
-      "/image?auto=format&fit=max&q=75&w=1000 1000w",
-      "/image?auto=format&fit=max&q=75&w=1500 1500w",
-      "/image?auto=format&fit=max&q=75&w=2000 2000w",
-      "/image?auto=format&fit=max&q=75&w=2500 2500w",
-      "/image?auto=format&fit=max&q=75&w=3000 3000w",
-      "/image?auto=format&fit=max&q=75&w=3500 3500w",
-      "/image?auto=format&fit=max&q=75&w=4000 4000w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-10000x10000.png?auto=format&fit=max&q=75&w=500 500w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-10000x10000.png?auto=format&fit=max&q=75&w=1000 1000w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-10000x10000.png?auto=format&fit=max&q=75&w=1500 1500w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-10000x10000.png?auto=format&fit=max&q=75&w=2000 2000w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-10000x10000.png?auto=format&fit=max&q=75&w=2500 2500w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-10000x10000.png?auto=format&fit=max&q=75&w=3000 3000w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-10000x10000.png?auto=format&fit=max&q=75&w=3500 3500w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-10000x10000.png?auto=format&fit=max&q=75&w=4000 4000w",
     ])
   })
 
@@ -95,9 +109,9 @@ describe("buildSrcSet", () => {
         baseUrl,
       })
     ).toEqual([
-      "/image?auto=format&fit=max&q=75&rect=0,0,750,750&w=250 250w",
-      "/image?auto=format&fit=max&q=75&rect=0,0,750,750&w=500 500w",
-      "/image?auto=format&fit=max&q=75&rect=0,0,750,750&w=750 750w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&rect=0,0,750,750&w=250 250w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&rect=0,0,750,750&w=500 500w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&rect=0,0,750,750&w=750 750w",
     ])
   })
 
@@ -112,9 +126,9 @@ describe("buildSrcSet", () => {
         baseUrl,
       })
     ).toEqual([
-      "/image?auto=format&crop=entropy&fit=crop&h=250&q=75&rect=0,0,750,750&w=150 150w",
-      "/image?auto=format&crop=entropy&fit=crop&h=500&q=75&rect=0,0,750,750&w=300 300w",
-      "/image?auto=format&crop=entropy&fit=crop&h=750&q=75&rect=0,0,750,750&w=450 450w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&crop=entropy&fit=crop&h=250&q=75&rect=0,0,750,750&w=150 150w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&crop=entropy&fit=crop&h=500&q=75&rect=0,0,750,750&w=300 300w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&crop=entropy&fit=crop&h=750&q=75&rect=0,0,750,750&w=450 450w",
     ])
   })
 })
