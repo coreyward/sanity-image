@@ -18,6 +18,8 @@ glance:
 - Knows _exactly_ what size the image will be and sets `width` and `height`
   attributes accordingly
 - Supports `crop` and `hotspot` values from the Sanity Studio
+- Automatically crops to the most “interesting” part of the image if the aspect
+  ratio changes and no `hotspot` is provided
 - Images are _never_ scaled up
 - Tiny 4kb bundle size (2kb gzipped)
 - No dependencies
@@ -41,6 +43,12 @@ You can find the full writeup on getting going below, but in the interest of
 making it easy to see if this is the thing you are looking for, here’s a quick
 example of most of what you’ll need to know:
 
+**Simplest Case**:
+
+This will render the image out assuming it will be displayed at half its
+original width with a srcSet included (multiplies vary based on original image
+size):
+
 ```tsx
 import { SanityImage } from "sanity-image"
 
@@ -48,33 +56,46 @@ const YourSweetComponent = ({ image }: ComponentProps) => (
   <Image
     // Pass the Sanity Image ID (`_id`) (e.g., `image-abcde12345-1200x800-jpg`)
     id={image._id}
+    baseUrl="https://cdn.sanity.io/images/abcd1234/production"
+    alt="Demo image"
+  />
+)
+```
 
+**More full-featured example**:
+
+```tsx
+import { SanityImage } from "sanity-image"
+
+const YourSweetComponent = ({ image }: ComponentProps) => (
+  <Image
+    // Pass the Sanity Image ID (`_id`) (e.g., `image-abcde12345-1200x800-jpg`)
+    id={image._id}
+    //
     // You can set the base URL manually, or let it be constructed by passing
     // `projectId` and `dataset` props.
     baseUrl="https://cdn.sanity.io/images/abcd1234/production"
-    
-    // Optional props (recommended to at least set one of `width` or `height`):
-
+    //
     // Specify how big it is expected to render so a reasonable srcSet can be
     // generated using `width`, `height`, or both
     width={500}
     height={250}
-    
+    //
     // Choose whether you want it to act like `object-fit: cover` or
     // `object-fit: contain`, or leave it out to use the default (contain)
     mode="cover"
-    
+    //
     // Have hotspot or crop data from Sanity? Pass it in!
     hotspot={image.hotspot}
     crop={image.crop}
-    
+    //
     // Want low-quality image previews? Fetch them from Sanity and pass them in too.
     preview={image.asset.metadata.lqip}
-    
+    //
     // Have a burning desire to have Sanity change the format or something?
     // Most of the visual effects from the Sanity Image API are available:
     queryParams={{ sharpen: 30, q: 80 }}
-    
+    //
     // Anything else you want to pass through to the img tag? Go for it!
     alt="Sweet Christmas!"
     className="big-ol-image"
@@ -198,7 +219,148 @@ userselect: none;
 
 </details>
 
-## Fetching data from Sanity via GROQ
+## Tips
+
+### Wrap it internally
+
+I recommend creating a wrapper component internally to pass your `baseUrl` prop
+and pass through any props. This keeps the configuration in one place and gives
+you an entry point to add any other logic you might need. Here's a TypeScript
+example (for JavaScript, just remove the type annotation after `props`):
+
+```tsx
+import { SanityImage } from "sanity-image"
+
+const projectId = process.env.SANITY_PROJECT_ID
+const dataset = process.env.SANITY_DATASET
+const baseUrl = `https://cdn.sanity.io/images/${projectId}/${dataset}`
+
+export const Image = (
+  props: Omit<
+    React.ComponentProps<typeof SanityImage>,
+    "baseUrl" | "dataset" | "projectId"
+  >
+) => <SanityImage baseUrl={baseUrl} {...props} />
+```
+
+### Styling your images
+
+I recommend setting something like the following CSS for images in your project,
+then overriding styles as needed. This will ensure images act like block-level
+elements with infinitely scalable contents even with the `width` and `height`
+attributes set. It also makes it easier to handle responsiveness—if your
+container gets smaller, the image gets smaller.
+
+```css
+img {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+}
+```
+
+Here's an example of how that works when using, for example, a 3-column grid
+that fills the viewport until it is a maximum of 1,200px wide (plus padding).
+This produces columns that are 390px at most on desktop:
+
+```jsx
+<div
+  css={{
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: 15,
+    maxWidth: 1240,
+    paddingInline: 20,
+    marginInline: "auto",
+  }}
+>
+  {["image-a", "image-b", "image-c"].map((imageId) => (
+    <div key={imageId}>
+      <SanityImage
+        id={imageId}
+        baseUrl="..."
+        width={390}
+        sizes="(min-width: 1240px) 390px, calc((100vw - 40px - 30px) / 3)"
+      />
+    </div>
+  ))}
+</div>
+```
+
+If you need these images to all match in height, it's a good idea to switch to
+`cover` mode. With the height set to 260px and `mode="cover"`, this will produce
+images with a 3:2 aspect ratio that fill the column width even if the source
+image is too small:
+
+```jsx
+<SanityImage
+  id={imageId}
+  baseUrl="..."
+  width={390}
+  height={260}
+  mode="cover"
+  sizes="(min-width: 1240px) 390px, calc((100vw - 40px - 30px) / 3)"
+/>
+```
+
+In this example we don't pass a `hotspot` value, so the image will be cropped
+based on what Sanity thinks is the most interesting part of the image since
+`SanityImage` automatically sets `crop=entropy` in these cases. If you want to
+override that, you can pass a `hotspot` value.
+
+### Background images
+
+Using `SanityImage` for background images is easy, you just style the image to
+match the expectations of your mockup. In most cases that means setting
+`position: relative` on the container you want to fill, then using absolute
+positioning for the image. Here’s an example:
+
+```jsx
+<section
+  css={{
+    position: "relative",
+    paddingBlock: 100,
+  }}
+>
+  <SanityImage
+    id="..."
+    baseUrl="..."
+    width={1440}
+    css={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      userSelect: "none",
+      zIndex: 1,
+    }}
+    alt=""
+  />
+
+  <div css={{ position: "relative", zIndex: 2 }}>
+    <h1>Your big hero copy</h1>
+    <LinkButton to="/signup/">Get started</LinkButton>
+  </div>
+</section>
+```
+
+This will cause the `section` to be sized based on the content inside of the
+`div`, and the image will be sized to fill the entire section. The aspect ratio
+of the image will be maintained due to the use of `object-fit: cover`. Note that
+we are still using `mode="contain"` for `SanityImage` here. If you have a rough
+idea of the height your section, you can set `height` and `mode="cover"` which
+will prevent, for example, a portrait orientation image from being retrieved and
+cropped by the browser.
+
+Since the z-index is set higher on the `div` containing the content, it will
+show above the image. This example also sets `user-select: none` on the image to
+prevent the image from being selected when the user clicks and drags on the page
+to make it behave more like a traditional background image.
+
+### Fetching data from Sanity via GROQ
 
 If you're using Sanity's GROQ query language to fetch data, here is how I
 recommend fetching the fields you need from a typical image with the hotspot,
