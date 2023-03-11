@@ -148,6 +148,21 @@ describe("buildSrcSet", () => {
       "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=crop&fp-x=1&fp-y=1&h=800&q=75&rect=300,0,700,800&w=400 400w",
     ])
   })
+
+  it("uses the largest image possible if a 2x isn't possible", () => {
+    expect(
+      buildSrcSet({
+        id: image.asset._id,
+        width: 600,
+        baseUrl,
+      })
+    ).toEqual([
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=300 300w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=600 600w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=900 900w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=1000 1000w",
+    ])
+  })
 })
 
 describe("buildQueryParams", () => {
