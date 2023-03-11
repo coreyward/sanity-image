@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const esbuild = require("esbuild")
 
 const sharedConfig = {
   entryPoints: ["src/index.ts"],
-  external: ["react", "@sanity/image-url"],
+  external: ["react"],
   bundle: true,
   minify: true,
   sourcemap: true,
