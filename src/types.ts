@@ -1,12 +1,3 @@
-import {
-  type AutoMode,
-  type CropMode,
-  type FitMode,
-  type ImageFormat,
-  type ImageUrlBuilderOptionsWithAliases,
-  type SanityImageSource,
-  type Orientation,
-} from "@sanity/image-url/lib/types/types"
 import type { AsProp } from "./polymorphic-voodoo"
 export type {
   AsProp,
@@ -61,7 +52,14 @@ export type SanityImageProps = ImageQueryInputs & {
    */
   htmlId?: string
 
-  config?: ImageBuilderParameters
+  /**
+   * Query string params to pass to Sanity's image CDN directly. Note that this
+   * is only a subset of the params supported by the Sanity image CDN. Many are
+   * set automatically by this library, and several others result in behavior
+   * you probably don't want. If you need something and have a compelling use
+   * case, please open an issue and I'd be delighted to consider it.
+   */
+  queryParams?: DirectQueryParams
 }
 
 export type ImageWithPreviewProps<T extends React.ElementType> = {
@@ -97,39 +95,44 @@ export type ImageIdParts = {
   format: string
 }
 
-export type ImageBuilderParameter = keyof ImageBuilderParameters
-
-export type ImageBuilderParameters = {
-  auto?: AutoMode
-  bg?: string
+/**
+ * Query string params to pass to Sanity's image CDN directly.
+ */
+export type DirectQueryParams = {
+  /**
+   * Blur 1-2000.
+   */
   blur?: number
-  crop?: CropMode
-  dataset?: string
-  dpr?: number
-  fit?: FitMode
-  flipHorizontal?: boolean
-  flipVertical?: boolean
-  focalPoint?: [number, number]
-  forceDownload?: boolean | string
-  format?: ImageFormat
-  height?: number
-  ignoreImageParams?: boolean
-  image?: SanityImageSource
-  invert?: boolean
-  maxHeight?: number
-  maxWidth?: number
-  minHeight?: number
-  minWidth?: number
-  orientation?: Orientation
-  pad?: number
-  projectId?: string
-  quality?: number
-  rect?: [number, number, number, number]
-  saturation?: number
+
+  /**
+   * Flipping. Flip image horizontally, vertically or both. Possible values: h,
+   * v, hv.
+   */
+  flip?: "h" | "v" | "hv"
+
+  /**
+   * Format. Convert image to jpg, pjpg, png, or webp. Note: like other query
+   * string params, this doesn't work on SVG source images.
+   */
+  fm?: "jpg" | "pjpg" | "png" | "webp"
+
+  /**
+   * Quality 0-100. Specify the compression quality (where applicable). Defaults
+   * to 75 for JPG and WebP.
+   */
+  q?: number
+
+  /**
+   * Saturation. Currently the asset pipeline only supports `sat=-100`, which
+   * renders the image with grayscale colors. Support for more levels of
+   * saturation is planned for later.
+   */
+  sat?: -100
+
+  /**
+   * Sharpen 0-100.
+   */
   sharpen?: number
-  size?: [number, number]
-  width?: number
-  withOptions?: Partial<ImageUrlBuilderOptionsWithAliases>
 }
 
 export type ImageQueryInputs = {
@@ -166,11 +169,13 @@ export type ImageQueryInputs = {
 
   /** The crop coordinates to use for the image. */
   crop?: CropData
+
+  queryParams?: DirectQueryParams
 }
 
 export type ImageSrcInputs = ImageQueryInputs & { baseUrl: string }
 
-export type ImageQueryParams = {
+export type ImageQueryParams = DirectQueryParams & {
   /**
    * Enables support for serving alternate image formats to supporting browsers
    **/

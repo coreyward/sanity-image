@@ -31,8 +31,8 @@ export const SanityImage = <C extends ElementType = "img">({
   htmlHeight,
   htmlId,
 
-  // TODO: Reintroduce
-  // config = {},
+  // Image query string params
+  queryParams,
 
   // Any remaining props are passed through to the rendered component
   ...rest
@@ -70,7 +70,7 @@ export const SanityImage = <C extends ElementType = "img">({
   }
 
   // Create default src and build srcSet
-  const { src, ...outputDimensions } = buildSrc({
+  const srcParams = {
     baseUrl,
     id,
     crop,
@@ -78,20 +78,14 @@ export const SanityImage = <C extends ElementType = "img">({
     width,
     height,
     mode,
-  })
+    queryParams,
+  }
+
+  const { src, ...outputDimensions } = buildSrc(srcParams)
+  componentProps.srcSet = buildSrcSet(srcParams).join(", ")
   componentProps.src = src
   componentProps.width = htmlWidth ?? outputDimensions.width
   componentProps.height = htmlHeight ?? outputDimensions.height
-
-  componentProps.srcSet = buildSrcSet({
-    baseUrl,
-    id,
-    crop,
-    hotspot,
-    width,
-    height,
-    mode,
-  }).join(", ")
 
   if (preview) {
     componentProps.as = component ?? "img"

@@ -114,6 +114,7 @@ export const buildQueryParams = ({
   height,
   hotspot,
   crop,
+  queryParams,
   options: { includeMetadata = false } = {},
 }: ImageQueryInputs & {
   options?: {
@@ -183,8 +184,11 @@ export const buildQueryParams = ({
   const params: Partial<ImageQueryParams> = {
     w: width,
     q: 75,
-    auto: "format",
+    ...queryParams,
   }
+
+  // If an explicit format has not been requested, use auto format
+  if (!params.fm) params.auto = "format"
 
   if (crop) {
     // Convert crop to rect param)

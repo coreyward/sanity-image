@@ -524,6 +524,42 @@ describe("buildQueryParams", () => {
       })
     })
   })
+
+  describe("queryParams", () => {
+    it("only uses auto format if no format is specified", () => {
+      expect(
+        buildQueryParams({
+          id: image.asset._id,
+          queryParams: { fm: "webp" },
+        }).auto
+      ).toEqual(undefined)
+    })
+
+    it("passes through valid query params", () => {
+      expect(
+        buildQueryParams({
+          id: image.asset._id,
+          queryParams: {
+            blur: 20,
+            flip: "hv",
+            fm: "webp",
+            q: 20,
+            sat: -100,
+            sharpen: 42,
+          },
+        })
+      ).toEqual(<ImageQueryParams>{
+        blur: 20,
+        fit: "max",
+        flip: "hv",
+        fm: "webp",
+        q: 20,
+        sat: -100,
+        sharpen: 42,
+        w: 500,
+      })
+    })
+  })
 })
 
 describe("croppedImageSize", () => {

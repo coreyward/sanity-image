@@ -246,6 +246,28 @@ describe("svg source image", () => {
   })
 })
 
-describe.skip("custom config", () => {
-  it.todo("passes valid config directives in src")
+describe("custom query string params", () => {
+  it("supports valid query string params", () => {
+    const { baseElement } = render(
+      <SanityImage
+        id={id}
+        width={500}
+        baseUrl={baseUrl}
+        queryParams={{
+          blur: 20,
+          flip: "hv",
+          fm: "webp",
+          q: 20,
+          sat: -100,
+          sharpen: 42,
+        }}
+      />
+    )
+
+    const { src } = getAttributes(baseElement)
+
+    expect(src).toEqual(
+      "/images/abc123-1000x1000.jpg?blur=20&fit=max&flip=hv&fm=webp&q=20&sat=-100&sharpen=42&w=500"
+    )
+  })
 })
