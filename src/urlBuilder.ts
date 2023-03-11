@@ -44,7 +44,7 @@ export const buildSrcSet = ({
   baseUrl,
 }: ImageSrcInputs) => {
   // Determine base computed width
-  const { w } = buildQueryParams({ id, mode, width, height, hotspot, crop })
+  const { w, h } = buildQueryParams({ id, mode, width, height, hotspot, crop })
 
   // URL of the image without any query parameters
   const imageUrl = `${baseUrl}${imageIdToUrlPath(id)}`
@@ -53,7 +53,7 @@ export const buildSrcSet = ({
   const srcSetEntries = dynamicMultipliers(w)
     .map((multiple) => {
       const computedWidth = Math.round(w * multiple)
-      const computedHeight = height && Math.round(height * multiple)
+      const computedHeight = h && Math.round(h * multiple)
 
       // Ignore tiny entries; the extra data in the HTML is almost never worth it
       if (multiple < 1 && computedWidth < 50) return null
@@ -191,13 +191,11 @@ export const buildQueryParams = ({
     if (hotspot) {
       // Hotspot is relative to post-`rect` dimensions; if `crop` is present,
       // the hotspot inputs need to be adjusted accordingly
-      if (crop) {
-        params["fp-x"] = (hotspot.x / (1 - crop.left - crop.right)).toFixed(3)
-        params["fp-y"] = (hotspot.y / (1 - crop.top - crop.bottom)).toFixed(3)
-      } else {
-        params["fp-x"] = hotspot.x
-        params["fp-y"] = hotspot.y
-      }
+      const x = crop ? hotspot.x / (1 - crop.left - crop.right) : hotspot.x
+      const y = crop ? hotspot.y / (1 - crop.top - crop.bottom) : hotspot.y
+
+      params["fp-x"] = roundWithPrecision(clamp(x, 0, 1), 3)
+      params["fp-y"] = roundWithPrecision(clamp(y, 0, 1), 3)
     } else {
       // If no hotspot is provided, use Sanity’s `entropy` crop mode
       params.crop = "entropy"
@@ -222,6 +220,11 @@ export const buildQueryParams = ({
 
   return <ImageQueryParams>params
 }
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, value))
+const roundWithPrecision = (value: number, precision: number) =>
+  Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision)
 
 export const croppedImageSize = (
   /** Source/original image dimensions */

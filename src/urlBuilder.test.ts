@@ -131,6 +131,23 @@ describe("buildSrcSet", () => {
       "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&crop=entropy&fit=crop&h=750&q=75&rect=0,0,750,750&w=450 450w",
     ])
   })
+
+  it("handles complex height-constrained cases", () => {
+    expect(
+      buildSrcSet({
+        id: image.asset._id,
+        crop: { top: 0, bottom: 0.2, left: 0.3, right: 0 },
+        width: 500,
+        height: 1000,
+        mode: "cover",
+        hotspot: { x: 1, y: 1 },
+        baseUrl,
+      })
+    ).toEqual([
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=crop&fp-x=1&fp-y=1&h=400&q=75&rect=300,0,700,800&w=200 200w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=crop&fp-x=1&fp-y=1&h=800&q=75&rect=300,0,700,800&w=400 400w",
+    ])
+  })
 })
 
 describe("buildQueryParams", () => {
@@ -346,10 +363,52 @@ describe("buildQueryParams", () => {
         })
       ).toEqual(<ImageQueryParams>{
         rect: "0,0,750,750",
-        "fp-x": "0.333",
-        "fp-y": "0.333",
+        "fp-x": 0.333,
+        "fp-y": 0.333,
         w: 375,
         h: 100,
+        fit: "crop",
+        q: 75,
+        auto: "format",
+      })
+    })
+
+    it("tolerates out-of-bounds focal points", () => {
+      expect(
+        buildQueryParams({
+          id: image.asset._id,
+          crop: { top: 0, bottom: 0.2, left: 0.3, right: 0 },
+          width: 500,
+          height: 1000,
+          mode: "cover",
+          hotspot: { x: 1, y: 1 },
+        })
+      ).toEqual(<ImageQueryParams>{
+        rect: "300,0,700,800",
+        "fp-x": 1,
+        "fp-y": 1,
+        w: 400,
+        h: 800,
+        fit: "crop",
+        q: 75,
+        auto: "format",
+      })
+
+      expect(
+        buildQueryParams({
+          id: image.asset._id,
+          crop: { top: 0, bottom: 0.2, left: 0.3, right: 0 },
+          width: 200,
+          height: 400,
+          mode: "cover",
+          hotspot: { x: 1, y: 1 },
+        })
+      ).toEqual(<ImageQueryParams>{
+        rect: "300,0,700,800",
+        "fp-x": 1,
+        "fp-y": 1,
+        w: 200,
+        h: 400,
         fit: "crop",
         q: 75,
         auto: "format",

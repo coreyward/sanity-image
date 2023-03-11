@@ -219,12 +219,12 @@ export type ImageQueryParams = {
    * Focal point (x) between 0 and 1. For non-terminal decimal values, use a
    * string rounded to 3 decimal places.
    */
-  "fp-x"?: number | string
+  "fp-x"?: number
   /**
    * Focal point (x) between 0 and 1. For non-terminal decimal values, use a
    * string rounded to 3 decimal places.
    */
-  "fp-y"?: number | string
+  "fp-y"?: number
 
   /**
    * Rect string in the format `x,y,w,h` where `x` and `y` are the top-left
