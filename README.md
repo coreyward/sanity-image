@@ -198,6 +198,24 @@ userselect: none;
 
 </details>
 
+## Fetching data from Sanity via GROQ
+
+If you're using Sanity's GROQ query language to fetch data, here is how I
+recommend fetching the fields you need from a typical image with the hotspot,
+crop, and low-quality image preview included:
+
+```groq
+"id": asset._ref,
+"preview": asset->metadata.lqip,
+hotspot { x, y },
+crop {
+  bottom,
+  left,
+  right,
+  top,
+}
+```
+
 ## License
 
 Copyright ©2023 Corey Ward. Available under the
