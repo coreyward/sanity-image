@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import { ImageWithPreviewProps } from "./types"
+import type { ImageWithPreviewProps } from "./types"
 
 /**
  * Renders two image tags, one with the preview image and one with the full

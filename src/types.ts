@@ -1,4 +1,3 @@
-import { type ImageUrlBuilder } from "@sanity/image-url/lib/types/builder"
 import {
   type AutoMode,
   type CropMode,
@@ -9,84 +8,96 @@ import {
   type Orientation,
 } from "@sanity/image-url/lib/types/types"
 
-export type PolymorphicComponentProp<
-  T extends React.ElementType,
-  Props = {}
-> = React.PropsWithChildren<Props & AsProp<T>> &
-  Omit<React.ComponentPropsWithoutRef<T>, PropsToOmit<T, Props>>
+// Source: https://github.com/emotion-js/emotion/blob/master/packages/styled-base/types/helper.d.ts
+// A more precise version of just React.ComponentPropsWithoutRef on its own
+export type PropsOf<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  C extends keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>
+> = JSX.LibraryManagedAttributes<C, React.ComponentPropsWithoutRef<C>>
 
-type AsProp<T extends React.ElementType> = {
+type AsProp<C extends React.ElementType> = {
   /**
    * By default, the component will render an `<img>` tag. You can override this
    * by passing a different component or HTML tag name.
    */
-  as?: T
+  as?: C
 }
 
-type PropsToOmit<C extends React.ElementType, P> = keyof (AsProp<C> & P)
+/**
+ * Allows for extending a set of props (`ExtendedProps`) by an overriding set of props
+ * (`OverrideProps`), ensuring that any duplicates are overridden by the overriding
+ * set of props.
+ */
+export type ExtendableProps<
+  ExtendedProps = object,
+  OverrideProps = object
+> = OverrideProps & Omit<ExtendedProps, keyof OverrideProps>
 
-export type SanityImageProps = {
-  /**
-   * Object with either an `_id` or a `_ref` property representing the Sanity.io
-   * image `_id` and optionally metadata with a base-64 encoded preview image.
-   */
-  asset: AssetProperty
-  hotspot?: HotspotData
-  crop?: CropData
+/**
+ * Allows for inheriting the props from the specified element type so that
+ * props like children, className & style work, as well as element-specific
+ * attributes like aria roles. The component (`C`) must be passed in.
+ */
+export type InheritableElementProps<
+  C extends React.ElementType,
+  Props = object
+> = ExtendableProps<PropsOf<C>, Props>
+
+/**
+ * A more sophisticated version of `InheritableElementProps` where
+ * the passed in `as` prop will determine which props can be included
+ */
+export type PolymorphicComponentProps<
+  C extends React.ElementType,
+  Props = object
+> = InheritableElementProps<C, Props & AsProp<C>>
+
+export type SanityImageProps = ImageQueryInputs & {
+  preview?: string
 
   /**
-   * The Sanity image builder instance to use for generating the image URL.
+   * The base url for the Sanity CDN including project ID and dataset. If not
+   * provided, the `projectId` and `dataset` props will be used to construct the
+   * URL.
    */
-  builder: ImageUrlBuilder
+  baseUrl?: string
 
   /**
-   * Ignored prop to make it easier to expand an asset fetched from GROQ.
+   * The Sanity project ID to use for the image URL. If preferred, the `baseUrl`
+   * prop can be provided instead.
    */
-  _key?: unknown
+  projectId?: string
+
   /**
-   * Ignored prop to make it easier to expand an asset fetched from GROQ.
+   * The Sanity dataset to use for the image URL. If preferred, the `baseUrl`
+   * prop can be provided instead.
    */
-  _type?: unknown
+  dataset?: string
+
   /**
    * `alt` attribute for the image; set to an empty string if not provided.
    */
-  alt?: string
+  // alt?: string
 
-  /**
-   * Only used for determining the dimensions of the generated assets, not for
-   * layout. Use CSS to specify how the browser should render the image instead.
-   */
-  width?: number
-  /**
-   * Only used for determining the dimensions of the generated assets, not for
-   * layout. Use CSS to specify how the browser should render the image instead.
-   */
-  height?: number
   /**
    * Passed through to the <img> tag as `height`, overriding the `aspectRatio`
    * option, if enabled.
    */
   htmlHeight?: number
+
   /**
    * Passed through to the <img> tag as `width`, overriding the `aspectRatio`
    * option, if enabled.
    */
   htmlWidth?: number
 
+  /**
+   * Passed through to the <img> tag as `id` since the `id` prop is reserved for
+   * the Sanity image asset ID.
+   */
+  htmlId?: string
+
   config?: ImageBuilderParameters
-  options?: {
-    /**
-     * If enabled, this will estimate the final aspect ratio based on the
-     * dimensions of the original image and the crop parameter, then use this
-     * aspect ratio to apply `width` and `height` attrs to both the preview and
-     * final images.
-     *
-     * Note: No attempts are made to compensate for the `fit` mode or image
-     * params that transform the final output dimensions in this early
-     * proof-of-concept version.
-     */
-    aspectRatio?: boolean
-  }
 }
 
 export type ImageWithPreviewProps<T extends React.ElementType> = {
@@ -106,28 +117,10 @@ export type HotspotData = {
   y: number
 }
 
-type AssetMetadata = {
-  lqip?: string
-  preview?: string
-}
-
-type IdAsset = {
-  _id: string
-  metadata?: AssetMetadata
-}
-
-type RefAsset = {
-  _ref: string
-  metadata?: AssetMetadata
-}
-
-type AssetProperty = IdAsset | RefAsset
-
 export type Asset = {
   _id: string
   crop?: CropData
   hotspot?: HotspotData
-  metadata?: AssetMetadata
 }
 
 export type ImageIdParts = {
@@ -187,14 +180,24 @@ export type ImageQueryInputs = {
    */
   mode?: "cover" | "contain"
 
-  /** The target width of the image in pixels. */
+  /**
+   * The target width of the image in pixels. Only used for determining the
+   * dimensions of the generated assets, not for layout. Use CSS to specify how
+   * the browser should render the image instead.
+   */
   width?: number
 
-  /** The target height of the image in pixels. */
+  /**
+   * The target height of the image in pixels. Only used for determining the
+   * dimensions of the generated assets, not for layout. Use CSS to specify how
+   * the browser should render the image instead.
+   */
   height?: number
 
-  /** The hotspot coordinates to use for the image. Note: hotspot `width` and
-   * `height` are not used. */
+  /**
+   * The hotspot coordinates to use for the image. Note: hotspot `width` and
+   * `height` are not used.
+   */
   hotspot?: { x: number; y: number }
 
   /** The crop coordinates to use for the image. */

@@ -3,114 +3,90 @@ import React, {
   type ElementType,
   type ComponentPropsWithoutRef,
 } from "react"
-import { Asset, PolymorphicComponentProp, SanityImageProps } from "./types"
-import { parseImageId } from "./parseImageId"
-import { buildSource, buildSourceSet, imageUrl } from "./imageUrls"
+import type { PolymorphicComponentProps, SanityImageProps } from "./types"
+import { buildSrc, buildSrcSet } from "./urlBuilder"
 import { ImageWithPreview } from "./ImageWithPreview"
 
-export const SanityImage = <T extends ElementType = "img">({
+export const SanityImage = <C extends ElementType = "img">({
   as: component,
-  builder,
 
-  asset,
+  // Sanity url
+  baseUrl,
+  projectId,
+  dataset,
+
+  // Image definition data
+  id,
   hotspot,
   crop,
-
   width,
   height,
+  mode = "contain",
+
+  // Data for LQIP (preview image)
+  preview,
+
+  // Native-behavior overrides
   htmlWidth,
   htmlHeight,
+  htmlId,
 
-  options = {},
-  config = {},
+  // TODO: Reintroduce
+  // config = {},
 
-  // Swallowing these params for convenience
-  _type,
-  _key,
-
-  alt = "",
+  // Any remaining props are passed through to the rendered component
   ...rest
-}: PolymorphicComponentProp<T, SanityImageProps>): ReactElement => {
+}: PolymorphicComponentProps<C, SanityImageProps>): ReactElement => {
+  if (!id) throw new Error("Missing required `id` prop for <SanityImage>.")
+  if (!baseUrl && (!projectId || !dataset))
+    throw new Error(
+      "Missing required `baseUrl` or `projectId` and `dataset` props for <SanityImage>."
+    )
+
+  baseUrl = baseUrl ?? `https://cdn.sanity.io/images/${projectId}/${dataset}/`
+
   const ImageComponent = component ?? "img"
-  const preview = asset.metadata?.preview ?? asset.metadata?.lqip
 
-  const props: typeof rest & {
-    alt: string
-    width?: number
-    height?: number
-  } = {
-    ...rest,
-    alt: alt || "",
-  }
-
-  // Rebuild `asset` with only the properties needed for the image
-  const image: Asset = {
-    _id: "_id" in asset ? asset._id : asset._ref,
-    crop,
-    hotspot,
-  }
-
-  // Short circuit for SVG images
-  if (parseImageId(image._id).format === "svg") {
-    return <ImageComponent src={imageUrl(image, builder)} {...props} />
-  }
+  // TODO: Short circuit for SVG images
+  // if (id.endsWith("-svg")) {
+  //   return <ImageComponent src={imageUrl(image, builder)} {...props} />
+  // }
 
   // Create default src and build srcSet
-  const source = buildSource(image, builder, { ...config, height, width })
-  const sourceSet = buildSourceSet(image, builder, { ...config, height, width })
-
-  if (options.aspectRatio) {
-    // If enabled, this will estimate the final aspect ratio based on
-    // the dimensions of the original image and the crop parameter,
-    // then use this aspect ratio to apply `width` and `height` attrs
-    // to both the preview and final images.
-    //
-    // Note: No attempts are made to compensate for the `fit` mode or
-    // image params that transform the final output dimensions in this
-    // early proof-of-concept version.
-    const { dimensions } = parseImageId(image._id)
-
-    // Short circuit if both width and height are set. This will result
-    // in the final aspect ratio matching the aspect ration of the
-    // provided width and height props, ignoring the image dimensions.
-    //
-    // This relies on a bug in the @sanity/image-url library that
-    // results in images being cropped with fit modes where they
-    // should not be.
-    if (width && height) {
-      props.width = width
-      props.height = height
-    } else {
-      // If `crop` isn't set, use fallback values.
-      crop = crop ?? { bottom: 0, left: 0, right: 0, top: 0 }
-
-      const croppedWidth = dimensions.width * (1 - crop.left - crop.right)
-      const croppedHeight = dimensions.height * (1 - crop.top - crop.bottom)
-      const ratio = croppedWidth / croppedHeight
-
-      props.width = width ?? dimensions.width
-      props.height = Math.round(props.width / ratio)
-    }
-  }
-
-  if (htmlWidth) props.width = htmlWidth
-  if (htmlHeight) props.height = htmlHeight
+  const { src, ...outputDimensions } = buildSrc({
+    baseUrl,
+    id,
+    crop,
+    hotspot,
+    width,
+    height,
+    mode,
+  })
+  const sourceSet = buildSrcSet({
+    baseUrl,
+    id,
+    crop,
+    hotspot,
+    width,
+    height,
+    mode,
+  }).join(", ")
 
   const Image = preview ? ImageWithPreview : ImageComponent
 
   const componentProps: ComponentPropsWithoutRef<typeof Image> = {
-    ...props,
-    loading: props.loading ?? "lazy",
-    src: source,
+    src,
     srcSet: sourceSet,
-    style: {
-      ...props.style,
-      ...(hotspot && {
-        objectPosition: [hotspot.x, hotspot.y]
-          .map((value) => (value * 100).toFixed(2) + "%")
-          .join(" "),
-      }),
-    },
+
+    // Set to avoid browser reflow on load (CLS)
+    width: htmlWidth ?? outputDimensions.width,
+    height: htmlHeight ?? outputDimensions.height,
+
+    alt: rest.alt ?? "",
+    loading: rest.loading ?? "lazy",
+    id: htmlId,
+
+    ...rest,
   }
 
   return preview ? (
