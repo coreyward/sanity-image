@@ -74,6 +74,16 @@ export const buildSrcSet = ({
   return Array.from(new Set(srcSetEntries))
 }
 
+export const buildSvgAttributes = ({ id, baseUrl }: ImageSrcInputs) => {
+  const { assetId, dimensions, format } = parseImageId(id)
+
+  return {
+    src: `${baseUrl}${assetId}-${dimensions.width}x${dimensions.height}.${format}`,
+    width: dimensions.width,
+    height: dimensions.height,
+  }
+}
+
 const dynamicMultipliers = (width: number) => {
   // For really small images, use larger steps
   if (width < 160) {

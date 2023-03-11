@@ -4,7 +4,7 @@ import React, {
   type ComponentPropsWithoutRef,
 } from "react"
 import type { PolymorphicComponentProps, SanityImageProps } from "./types"
-import { buildSrc, buildSrcSet } from "./urlBuilder"
+import { buildSrc, buildSrcSet, buildSvgAttributes } from "./urlBuilder"
 import { ImageWithPreview } from "./ImageWithPreview"
 
 export const SanityImage = <C extends ElementType = "img">({
@@ -45,12 +45,29 @@ export const SanityImage = <C extends ElementType = "img">({
 
   baseUrl = baseUrl ?? `https://cdn.sanity.io/images/${projectId}/${dataset}/`
 
-  const ImageComponent = component ?? "img"
+  const isSvg = id.endsWith("-svg")
 
-  // TODO: Short circuit for SVG images
-  // if (id.endsWith("-svg")) {
-  //   return <ImageComponent src={imageUrl(image, builder)} {...props} />
-  // }
+  const ImageComponent =
+    preview && !isSvg ? ImageWithPreview : component ?? "img"
+
+  const componentProps: ComponentPropsWithoutRef<typeof ImageComponent> = {
+    alt: rest.alt ?? "",
+    loading: rest.loading ?? "lazy",
+    id: htmlId,
+    ...rest,
+  }
+
+  if (isSvg) {
+    // Sanity ignores all transformations for SVGs, so we can just render the
+    // component without passing a query string and without doing anything for
+    // the preview.
+    return (
+      <ImageComponent
+        {...buildSvgAttributes({ id, baseUrl })}
+        {...componentProps}
+      />
+    )
+  }
 
   // Create default src and build srcSet
   const { src, ...outputDimensions } = buildSrc({
@@ -62,7 +79,11 @@ export const SanityImage = <C extends ElementType = "img">({
     height,
     mode,
   })
-  const sourceSet = buildSrcSet({
+  componentProps.src = src
+  componentProps.width = htmlWidth ?? outputDimensions.width
+  componentProps.height = htmlHeight ?? outputDimensions.height
+
+  componentProps.srcSet = buildSrcSet({
     baseUrl,
     id,
     crop,
@@ -72,30 +93,10 @@ export const SanityImage = <C extends ElementType = "img">({
     mode,
   }).join(", ")
 
-  const Image = preview ? ImageWithPreview : ImageComponent
-
-  const componentProps: ComponentPropsWithoutRef<typeof Image> = {
-    src,
-    srcSet: sourceSet,
-
-    // Set to avoid browser reflow on load (CLS)
-    width: htmlWidth ?? outputDimensions.width,
-    height: htmlHeight ?? outputDimensions.height,
-
-    alt: rest.alt ?? "",
-    loading: rest.loading ?? "lazy",
-    id: htmlId,
-
-    ...rest,
+  if (preview) {
+    componentProps.as = component ?? "img"
+    componentProps.preview = preview
   }
 
-  return preview ? (
-    <ImageWithPreview
-      {...componentProps}
-      as={ImageComponent}
-      preview={preview}
-    />
-  ) : (
-    <ImageComponent {...componentProps} />
-  )
+  return <ImageComponent {...componentProps} />
 }

@@ -215,7 +215,35 @@ describe("with custom image component", () => {
 })
 
 describe("svg source image", () => {
-  it.todo("skips transformations")
+  it("skips transformations", () => {
+    const svgId = "image-abc123-300x100-svg"
+
+    const { baseElement } = render(
+      <SanityImage
+        id={svgId}
+        width={2000}
+        height={1000}
+        baseUrl={baseUrl}
+        mode="cover"
+        crop={{
+          top: 0,
+          bottom: 0.2,
+          left: 0.3,
+          right: 0,
+        }}
+        preview="lalala-i-am-a-preview"
+        alt="Still get dat alt tho"
+      />
+    )
+
+    const { src, srcset, width, height, alt } = getAttributes(baseElement)
+
+    expect(src).toEqual("/images/abc123-300x100.svg")
+    expect(srcset).toEqual(null)
+    expect(width).toEqual("300")
+    expect(height).toEqual("100")
+    expect(alt).toEqual("Still get dat alt tho")
+  })
 })
 
 describe.skip("custom config", () => {
