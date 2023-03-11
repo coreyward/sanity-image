@@ -269,8 +269,8 @@ export const buildRect = (
   const { width, height } = croppedImageSize(dimensions, crop)
 
   return [
-    crop.left * dimensions.width,
-    crop.top * dimensions.height,
+    Math.round(crop.left * dimensions.width),
+    Math.round(crop.top * dimensions.height),
     width,
     height,
   ].join(",")

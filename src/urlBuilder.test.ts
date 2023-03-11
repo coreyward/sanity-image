@@ -609,6 +609,15 @@ describe("buildRect", () => {
       )
     ).toThrowError()
   })
+
+  it("rounds values", () => {
+    expect(
+      buildRect(
+        { width: 30, height: 90 },
+        { top: 0.15, left: 0.1, right: 0.25, bottom: 0.05 }
+      )
+    ).toBe("3,14,20,72")
+  })
 })
 
 describe("buildQueryString", () => {
