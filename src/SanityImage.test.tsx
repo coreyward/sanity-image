@@ -165,6 +165,24 @@ describe("with preview", () => {
 })
 
 describe("cursed situations", () => {
+  let consoleErrorFn: jest.SpyInstance<
+    void,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [message?: any, ...optionalParams: any[]],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any
+  >
+
+  beforeAll(() => {
+    consoleErrorFn = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => jest.fn())
+  })
+
+  afterAll(() => {
+    consoleErrorFn?.mockRestore()
+  })
+
   it("throws if no id is provided", () => {
     expect(() => {
       render(<SanityImage id="" width={500} baseUrl={baseUrl} />)
