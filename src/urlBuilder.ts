@@ -271,8 +271,8 @@ export const buildRect = (
   return [
     Math.round(crop.left * dimensions.width),
     Math.round(crop.top * dimensions.height),
-    width,
-    height,
+    Math.round(width),
+    Math.round(height),
   ].join(",")
 }
 
