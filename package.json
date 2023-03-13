@@ -1,6 +1,6 @@
 {
   "name": "sanity-image",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Corey Ward <corey@hey.com>",
   "license": "MIT",
   "main": "dist/cjs/index.js",
