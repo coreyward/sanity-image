@@ -6,7 +6,7 @@ import type {
   ImageQueryInputs,
   ImageQueryParams,
   ImageSrcInputs,
-} from "types"
+} from "./types"
 
 /**
  * Convert ImageSrcInputs into a full image URL and computed output dimensions.

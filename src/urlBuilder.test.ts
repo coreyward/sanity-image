@@ -1,4 +1,4 @@
-import type { ImageQueryParams } from "types"
+import type { ImageQueryParams } from "./types"
 import {
   buildSrcSet,
   buildQueryParams,
