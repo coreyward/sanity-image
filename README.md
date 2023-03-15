@@ -53,7 +53,7 @@ size):
 import { SanityImage } from "sanity-image"
 
 const YourSweetComponent = ({ image }: ComponentProps) => (
-  <Image
+  <SanityImage
     // Pass the Sanity Image ID (`_id`) (e.g., `image-abcde12345-1200x800-jpg`)
     id={image._id}
     baseUrl="https://cdn.sanity.io/images/abcd1234/production"
@@ -68,7 +68,7 @@ const YourSweetComponent = ({ image }: ComponentProps) => (
 import { SanityImage } from "sanity-image"
 
 const YourSweetComponent = ({ image }: ComponentProps) => (
-  <Image
+  <SanityImage
     // Pass the Sanity Image ID (`_id`) (e.g., `image-abcde12345-1200x800-jpg`)
     id={image._id}
     //
