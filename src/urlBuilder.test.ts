@@ -625,8 +625,8 @@ describe("buildQueryString", () => {
     expect(
       buildQueryString({
         rect: "0,0,750,750",
-        "fp-x": "0.333",
-        "fp-y": "0.333",
+        "fp-x": 0.333,
+        "fp-y": 0.333,
         w: 375,
         h: 100,
         fit: "crop",

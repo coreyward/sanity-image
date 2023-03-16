@@ -42,7 +42,7 @@ export const buildSrcSet = ({
   hotspot,
   crop,
   baseUrl,
-}: ImageSrcInputs) => {
+}: ImageSrcInputs): string[] => {
   // Determine base computed width
   const { w, h } = buildQueryParams({ id, mode, width, height, hotspot, crop })
 
@@ -50,7 +50,7 @@ export const buildSrcSet = ({
   const imageUrl = `${baseUrl}${imageIdToUrlPath(id)}`
 
   // Build srcset
-  const srcSetEntries = dynamicMultipliers(w)
+  const srcSetEntries: string[] = dynamicMultipliers(w)
     .map((multiple) => {
       const computedWidth = Math.round(w * multiple)
       const computedHeight = h && Math.round(h * multiple)
@@ -69,7 +69,7 @@ export const buildSrcSet = ({
 
       return `${imageUrl}?${buildQueryString(params)} ${params.w}w`
     })
-    .filter(Boolean)
+    .filter((entry): entry is string => Boolean(entry))
 
   return Array.from(new Set(srcSetEntries))
 }
@@ -84,7 +84,7 @@ export const buildSvgAttributes = ({ id, baseUrl }: ImageSrcInputs) => {
   }
 }
 
-const dynamicMultipliers = (width: number) => {
+const dynamicMultipliers = (width: number): number[] => {
   // For really small images, use larger steps
   if (width < 160) {
     return [0.5, 1, 2]
@@ -222,7 +222,7 @@ export const buildQueryParams = ({
     // Height will be set if the aspect ratio varies from `sourceAspectRatio`
     const outputHeight = height || Math.round(width / sourceAspectRatio)
 
-    params.metadata = {
+    params.metadata = <ImageQueryParams["metadata"]>{
       sourceDimensions,
       outputDimensions: {
         width,
@@ -235,9 +235,10 @@ export const buildQueryParams = ({
   return <ImageQueryParams>params
 }
 
-const clamp = (value: number, min: number, max: number) =>
+const clamp = (value: number, min: number, max: number): number =>
   Math.max(min, Math.min(max, value))
-const roundWithPrecision = (value: number, precision: number) =>
+
+const roundWithPrecision = (value: number, precision: number): number =>
   Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision)
 
 export const croppedImageSize = (
@@ -265,7 +266,7 @@ export const buildRect = (
   /** Source/original image dimensions */
   dimensions: { width: number; height: number },
   crop: CropData
-) => {
+): string => {
   const { width, height } = croppedImageSize(dimensions, crop)
 
   return [
@@ -276,12 +277,21 @@ export const buildRect = (
   ].join(",")
 }
 
-export const buildQueryString = (params: Record<string, string | number>) =>
-  Object.entries(params)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(
-      ([key, value]) =>
-        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-    )
-    .join("&")
-    .replace(/%2C/g, ",") // don't urlencode commas
+/**
+ * Converts an object of query params into a query string. The keys are sorted
+ * alphabetically to maximize cache-hit rates. Commas are not URL-encoded since
+ * doing so is unnecessary, adds extra data, and makes it harder to read.
+ */
+export const buildQueryString = (
+  params: Partial<{
+    [K in keyof Omit<ImageQueryParams, "metadata">]: ImageQueryParams[K]
+  }>
+): string => {
+  const searchParams = new URLSearchParams(
+    Object.entries(params)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([key, value]) => [key, String(value)])
+  )
+
+  return searchParams.toString().replace(/%2C/g, ",") // don't urlencode commas
+}
