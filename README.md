@@ -56,7 +56,7 @@ const YourSweetComponent = ({ image }: ComponentProps) => (
   <SanityImage
     // Pass the Sanity Image ID (`_id`) (e.g., `image-abcde12345-1200x800-jpg`)
     id={image._id}
-    baseUrl="https://cdn.sanity.io/images/abcd1234/production"
+    baseUrl="https://cdn.sanity.io/images/abcd1234/production/"
     alt="Demo image"
   />
 )
@@ -74,7 +74,7 @@ const YourSweetComponent = ({ image }: ComponentProps) => (
     //
     // You can set the base URL manually, or let it be constructed by passing
     // `projectId` and `dataset` props.
-    baseUrl="https://cdn.sanity.io/images/abcd1234/production"
+    baseUrl="https://cdn.sanity.io/images/abcd1234/production/"
     //
     // Specify how big it is expected to render so a reasonable srcSet can be
     // generated using `width`, `height`, or both
@@ -233,7 +233,7 @@ import { SanityImage } from "sanity-image"
 
 const projectId = process.env.SANITY_PROJECT_ID
 const dataset = process.env.SANITY_DATASET
-const baseUrl = `https://cdn.sanity.io/images/${projectId}/${dataset}`
+const baseUrl = `https://cdn.sanity.io/images/${projectId}/${dataset}/`
 
 export const Image = (
   props: Omit<
