@@ -163,6 +163,25 @@ describe("buildSrcSet", () => {
       "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&fit=max&q=75&w=1000 1000w",
     ])
   })
+
+  it("respects queryParams", () => {
+    expect(
+      buildSrcSet({
+        id: image.asset._id,
+        width: 600,
+        baseUrl,
+        queryParams: {
+          q: 37,
+          blur: 222,
+        },
+      })
+    ).toEqual([
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&blur=222&fit=max&q=37&w=300 300w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&blur=222&fit=max&q=37&w=600 600w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&blur=222&fit=max&q=37&w=900 900w",
+      "/image/79f37b3f070b144d45455d514ff4e9fc43035649-1000x1000.png?auto=format&blur=222&fit=max&q=37&w=1000 1000w",
+    ])
+  })
 })
 
 describe("buildQueryParams", () => {

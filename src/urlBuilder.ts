@@ -42,6 +42,7 @@ export const buildSrcSet = ({
   hotspot,
   crop,
   baseUrl,
+  ...inputParams
 }: ImageSrcInputs): string[] => {
   // Determine base computed width
   const { w, h } = buildQueryParams({ id, mode, width, height, hotspot, crop })
@@ -65,6 +66,7 @@ export const buildSrcSet = ({
         height: computedHeight,
         hotspot,
         crop,
+        ...inputParams,
       })
 
       return `${imageUrl}?${buildQueryString(params)} ${params.w}w`

@@ -152,6 +152,26 @@ describe("without preview", () => {
 
     expect(baseElement).toMatchSnapshot()
   })
+
+  it("respects queryParams", () => {
+    const { baseElement } = render(
+      <SanityImage
+        id={id}
+        width={500}
+        baseUrl={baseUrl}
+        queryParams={{ q: 30, blur: 220 }}
+      />
+    )
+
+    const { src, srcset } = getAttributes(baseElement)
+
+    expect(src).toEqual(
+      "/images/abc123-1000x1000.jpg?auto=format&blur=220&fit=max&q=30&w=500"
+    )
+    expect(srcset).toEqual(
+      "/images/abc123-1000x1000.jpg?auto=format&blur=220&fit=max&q=30&w=250 250w, /images/abc123-1000x1000.jpg?auto=format&blur=220&fit=max&q=30&w=500 500w, /images/abc123-1000x1000.jpg?auto=format&blur=220&fit=max&q=30&w=750 750w, /images/abc123-1000x1000.jpg?auto=format&blur=220&fit=max&q=30&w=1000 1000w"
+    )
+  })
 })
 
 describe("with preview", () => {
