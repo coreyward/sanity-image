@@ -1,5 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`with preview merges \`style\` prop with default styles 1`] = `
+<body>
+  <div>
+    <img
+      alt=""
+      data-lqip="true"
+      height="500"
+      src="data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAMHBP/EACEQAAICAgEEAwAAAAAAAAAAAAECAwQABREGEiExFCKR/8QAFwEAAwEAAAAAAAAAAAAAAAAAAAIEBf/EABwRAAEEAwEAAAAAAAAAAAAAAAEAAgNRERIhFP/aAAwDAQACEQMRAD8As1Pjp7SCxZ7Wjh+zEZu1nUVHqjUW1oN3FVKMPRHIx1ytDbriCzGskLeCjejjNZrqmtidKNdIVY8ntHvFMbxICDykAt1Ix1R16d2lLJB8HYOFY8Mkg4P7hlXsQo0rEjycM0BM61J5o6X/2Q=="
+      style="color: red; opacity: 1;"
+      width="500"
+    />
+    <img
+      alt=""
+      data-loading="true"
+      height="500"
+      loading="lazy"
+      src="/images/abc123-1000x1000.jpg?auto=format&fit=max&q=75&w=500"
+      srcset="/images/abc123-1000x1000.jpg?auto=format&fit=max&q=75&w=250 250w, /images/abc123-1000x1000.jpg?auto=format&fit=max&q=75&w=500 500w, /images/abc123-1000x1000.jpg?auto=format&fit=max&q=75&w=750 750w, /images/abc123-1000x1000.jpg?auto=format&fit=max&q=75&w=1000 1000w"
+      style="position: absolute; z-index: -10; opacity: 1; pointer-events: none; user-select: none; color: red;"
+      width="500"
+    />
+  </div>
+</body>
+`;
+
 exports[`with preview renders preview image 1`] = `
 <body>
   <div>
@@ -17,7 +42,7 @@ exports[`with preview renders preview image 1`] = `
       loading="lazy"
       src="/images/abc123-1000x1000.jpg?auto=format&fit=max&q=75&w=500"
       srcset="/images/abc123-1000x1000.jpg?auto=format&fit=max&q=75&w=250 250w, /images/abc123-1000x1000.jpg?auto=format&fit=max&q=75&w=500 500w, /images/abc123-1000x1000.jpg?auto=format&fit=max&q=75&w=750 750w, /images/abc123-1000x1000.jpg?auto=format&fit=max&q=75&w=1000 1000w"
-      style="opacity: 0; pointer-events: none; position: absolute; user-select: none; z-index: -10;"
+      style="position: absolute; z-index: -10; opacity: 0; pointer-events: none; user-select: none;"
       width="500"
     />
   </div>

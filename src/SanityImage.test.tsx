@@ -182,6 +182,20 @@ describe("with preview", () => {
 
     expect(baseElement).toMatchSnapshot()
   })
+
+  it("merges `style` prop with default styles", () => {
+    const { baseElement } = render(
+      <SanityImage
+        id={id}
+        width={500}
+        baseUrl={baseUrl}
+        preview={preview}
+        style={{ color: "red", opacity: 1 }}
+      />
+    )
+
+    expect(baseElement).toMatchSnapshot()
+  })
 })
 
 describe("cursed situations", () => {

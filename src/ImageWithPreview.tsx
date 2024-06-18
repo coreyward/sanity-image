@@ -9,6 +9,7 @@ import type { ImageWithPreviewProps } from "./types"
 export const ImageWithPreview = <T extends React.ElementType = "img">({
   as,
   preview,
+  style,
   ...props
 }: ImageWithPreviewProps<T>) => {
   const [loaded, setLoaded] = useState(false)
@@ -36,7 +37,7 @@ export const ImageWithPreview = <T extends React.ElementType = "img">({
           height={props.height}
           id={props.id}
           src={preview}
-          style={props.style}
+          style={style}
           width={props.width}
         />
       )}
@@ -64,6 +65,8 @@ export const ImageWithPreview = <T extends React.ElementType = "img">({
                 // from interfering with UI while it's loading/hidden.
                 pointerEvents: "none",
                 userSelect: "none",
+
+                ...style,
               }
         }
         {...props}
