@@ -10,6 +10,7 @@ export const ImageWithPreview = <T extends React.ElementType = "img">({
   as,
   preview,
   style,
+  alt,
   ...props
 }: ImageWithPreviewProps<T>) => {
   const [loaded, setLoaded] = useState(false)
@@ -31,7 +32,7 @@ export const ImageWithPreview = <T extends React.ElementType = "img">({
     <>
       {!loaded && (
         <Img
-          alt={props.alt}
+          alt={loaded ? "" : alt}
           className={props.className}
           data-lqip
           height={props.height}
@@ -43,6 +44,7 @@ export const ImageWithPreview = <T extends React.ElementType = "img">({
       )}
       <Img
         data-loading={loaded ? null : true}
+        alt={loaded ? alt : ""}
         onLoad={onLoad}
         ref={ref}
         style={
