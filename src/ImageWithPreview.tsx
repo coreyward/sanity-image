@@ -49,25 +49,9 @@ export const ImageWithPreview = <T extends React.ElementType = "img">({
         ref={ref}
         style={
           loaded
-            ? undefined
+            ? style
             : {
-                // must be > 4px to be lazy loaded
-                height: "10px !important",
-
-                // must be > 4px to be lazy loaded
-                width: "10px !important",
-
-                // Cannot use negative x or y values, visibility: hidden, or display: none
-                // to hide or the image might not get loaded.
-                position: "absolute",
-                zIndex: -10,
-                opacity: 0,
-
-                // Disable pointer events and user select to prevent the image
-                // from interfering with UI while it's loading/hidden.
-                pointerEvents: "none",
-                userSelect: "none",
-
+                ...baseStyles,
                 ...style,
               }
         }
@@ -75,4 +59,23 @@ export const ImageWithPreview = <T extends React.ElementType = "img">({
       />
     </>
   )
+}
+
+const baseStyles: React.CSSProperties = {
+  // must be > 4px to be lazy loaded
+  height: "10px",
+
+  // must be > 4px to be lazy loaded
+  width: "10px",
+
+  // Cannot use negative x or y values, visibility: hidden, or display: none
+  // to hide or the image might not get loaded.
+  position: "absolute",
+  zIndex: -10,
+  opacity: 0,
+
+  // Disable pointer events and user select to prevent the image
+  // from interfering with UI while it's loading/hidden.
+  pointerEvents: "none",
+  userSelect: "none",
 }
