@@ -405,6 +405,34 @@ describe("buildQueryParams", () => {
         q: 75,
         auto: "format",
       })
+
+      expect(
+        buildQueryParams({
+          id: image.asset._id,
+          crop: {
+            top: 0.5,
+            bottom: 0,
+            left: 0.5,
+            right: 0,
+          },
+          width: 375,
+          height: 100,
+          mode: "cover",
+          hotspot: {
+            x: 0.5,
+            y: 0.5,
+          },
+        })
+      ).toEqual(<ImageQueryParams>{
+        rect: "500,500,500,500",
+        "fp-x": 0,
+        "fp-y": 0,
+        w: 375,
+        h: 100,
+        fit: "crop",
+        q: 75,
+        auto: "format",
+      })
     })
 
     it("tolerates out-of-bounds focal points", () => {
