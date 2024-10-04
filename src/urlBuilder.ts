@@ -207,8 +207,12 @@ export const buildQueryParams = ({
     if (hotspot) {
       // Hotspot is relative to post-`rect` dimensions; if `crop` is present,
       // the hotspot inputs need to be adjusted accordingly
-      const x = crop ? hotspot.x / (1 - crop.left - crop.right) : hotspot.x
-      const y = crop ? hotspot.y / (1 - crop.top - crop.bottom) : hotspot.y
+      const x = crop
+        ? (hotspot.x - crop.left) / (1 - crop.left - crop.right)
+        : hotspot.x
+      const y = crop
+        ? (hotspot.y - crop.top) / (1 - crop.top - crop.bottom)
+        : hotspot.y
 
       params["fp-x"] = roundWithPrecision(clamp(x, 0, 1), 3)
       params["fp-y"] = roundWithPrecision(clamp(y, 0, 1), 3)
