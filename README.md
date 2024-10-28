@@ -243,6 +243,18 @@ export const Image = (
 ) => <SanityImage baseUrl={baseUrl} {...props} />
 ```
 
+<details>
+  <summary>⚠️ Next.js components using `preview` will need to `"use client";`</summary>
+
+When using `SanityImage` in a Next.js (14 or newer) application, when you provide a `preview` string, your Image component will be required to spicify that it is a client-only component, which is done by adding the following line to the top of the compoent’s file:
+
+```
+"use client";
+
+```
+
+</details>
+
 ### Styling your images
 
 I recommend setting something like the following CSS for images in your project,
