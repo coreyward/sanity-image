@@ -246,7 +246,7 @@ export const Image = (
 <details>
   <summary><strong>⚠️ Next.js components using `preview` will need to "use client"</strong></summary>
 
-When using `SanityImage` in a Next.js (14 or newer) application, when you provide a `preview` string, your Image component will be required to spicify that it is a client-only component, which is done by adding the following line to the top of the compoent’s file:
+When using `SanityImage` in a Next.js (14 or newer) application, if you provide a `preview` string, your Image component will be required to specify that it is a client-only component, which is done by adding the following line to the top of the compoent’s file:
 
 ```
 "use client";
