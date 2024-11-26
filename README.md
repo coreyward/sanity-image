@@ -126,8 +126,8 @@ How it works at a glance:
 - Since we can compute the output dimensions of the image in all cases, the
   `width` and `height` attributes are set automatically to avoid layout shifts
 - A few image params are applied by default:
-  - `auto=format` - Sanity will use WebP images if they're supported by the
-    browser (note: if you specify `fm` manually, this won't be set)
+  - `auto=format` - Sanity will use AVIF images if they're supported by the
+    browser (https://www.sanity.io/help/avif) (note: if you specify `fm` manually, this won't be set)
   - `fit` - if the image aspect ratio isn't changed, this will be set to `max`;
     if the aspect ratio will change it's set to `crop`; you don't really need to
     worry about this though
