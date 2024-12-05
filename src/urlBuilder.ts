@@ -208,11 +208,13 @@ export const buildQueryParams = ({
       // Hotspot is relative to post-`rect` dimensions; if `crop` is present,
       // the hotspot inputs need to be adjusted accordingly
       const x = crop
-        ? (hotspot.x - crop.left) / (1 - crop.left - crop.right)
-        : hotspot.x
+        ? ((hotspot.x ?? 0) - (crop.left ?? 0)) /
+          (1 - (crop.left ?? 0) - (crop.right ?? 0))
+        : hotspot.x ?? 0
       const y = crop
-        ? (hotspot.y - crop.top) / (1 - crop.top - crop.bottom)
-        : hotspot.y
+        ? ((hotspot.y ?? 0) - (crop.top ?? 0)) /
+          (1 - (crop.top ?? 0) - (crop.bottom ?? 0))
+        : hotspot.y ?? 0
 
       params["fp-x"] = roundWithPrecision(clamp(x, 0, 1), 3)
       params["fp-y"] = roundWithPrecision(clamp(y, 0, 1), 3)
@@ -252,14 +254,21 @@ export const croppedImageSize = (
   dimensions: { width: number; height: number },
   crop: CropData
 ): ImageIdParts["dimensions"] => {
-  if (crop.left + crop.right >= 1 || crop.top + crop.bottom >= 1) {
+  if (
+    (crop.left ?? 0) + (crop.right ?? 0) >= 1 ||
+    (crop.top ?? 0) + (crop.bottom ?? 0) >= 1
+  ) {
     throw new Error(
       `Invalid crop: ${JSON.stringify(crop)}; crop values must be less than 1`
     )
   }
 
-  const width = Math.round(dimensions.width * (1 - crop.left - crop.right))
-  const height = Math.round(dimensions.height * (1 - crop.top - crop.bottom))
+  const width = Math.round(
+    dimensions.width * (1 - (crop.left ?? 0) - (crop.right ?? 0))
+  )
+  const height = Math.round(
+    dimensions.height * (1 - (crop.top ?? 0) - (crop.bottom ?? 0))
+  )
   const aspectRatio = width / height
 
   return { width, height, aspectRatio }
@@ -276,8 +285,8 @@ export const buildRect = (
   const { width, height } = croppedImageSize(dimensions, crop)
 
   return [
-    Math.round(crop.left * dimensions.width),
-    Math.round(crop.top * dimensions.height),
+    Math.round((crop.left ?? 0) * dimensions.width),
+    Math.round((crop.top ?? 0) * dimensions.height),
     width,
     height,
   ].join(",")

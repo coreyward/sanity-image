@@ -68,15 +68,15 @@ export type ImageWithPreviewProps<T extends React.ElementType> = {
   React.ComponentPropsWithRef<T>
 
 export type CropData = {
-  bottom: number
-  left: number
-  right: number
-  top: number
+  top?: number
+  bottom?: number
+  left?: number
+  right?: number
 }
 
 export type HotspotData = {
-  x: number
-  y: number
+  x?: number
+  y?: number
 }
 
 export type Asset = {
@@ -165,7 +165,7 @@ export type ImageQueryInputs = {
    * The hotspot coordinates to use for the image. Note: hotspot `width` and
    * `height` are not used.
    */
-  hotspot?: { x: number; y: number }
+  hotspot?: HotspotData
 
   /** The crop coordinates to use for the image. */
   crop?: CropData
