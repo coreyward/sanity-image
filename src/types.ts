@@ -60,6 +60,12 @@ export type SanityImageProps = ImageQueryInputs & {
    * case, please open an issue and I'd be delighted to consider it.
    */
   queryParams?: DirectQueryParams
+  
+  /**
+   * Optional filename to append to the image URL. Sometimes useful for
+   * SEO purposes.
+   */
+  vanityName?: string
 }
 
 export type ImageWithPreviewProps<T extends React.ElementType> = {
@@ -173,7 +179,7 @@ export type ImageQueryInputs = {
   queryParams?: DirectQueryParams
 }
 
-export type ImageSrcInputs = ImageQueryInputs & { baseUrl: string }
+export type ImageSrcInputs = ImageQueryInputs & { baseUrl: string, vanityName?: string }
 
 export type ImageQueryParams = DirectQueryParams & {
   /**
