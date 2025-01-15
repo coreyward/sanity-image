@@ -163,7 +163,7 @@ comfortable with TypeScript, that might give you more detail.
 - `mode` ("cover" | "contain") — Optional - Use `cover` to crop the image to
   match the requested aspect ratio (based on `width` and `height`). Use
   `contain` to fit the image to the boundaries provided without altering the
-  aspect ratio. Defaults to `"contain"`.
+  aspect ratio. Defaults to `"contain"`. See the image below for a comparison.
 - `width` (number) — Optional - The target width of the image in pixels. Only
   used for determining the dimensions of the generated assets, not for layout.
   Use CSS to specify how the browser should render the image instead.
@@ -220,6 +220,22 @@ userselect: none;
 </details>
 
 ## Tips
+
+### Choosing the right `mode`
+
+If you are providing only one dimension (`width` or  `height`, but not both), it
+doesn't matter since the behavior will be the same. 
+
+- **Contain** mode will treat the dimensions you provide as boundaries, resizing
+  the image to fit inside of them. The output image will match the aspect ratio
+  of the original image (i.e., no cropping will occur).
+- **Cover** mode will treat the dimensions you provide as a container, resizing
+  the image to completely fill the dimensions. The output image will match the
+  aspect ratio of the dimensions you provide.
+
+Here's a visual of this in action:
+
+![Sanity Image Mode Explanation](https://github.com/user-attachments/assets/82125edb-2081-448e-9f06-c90d4f0bbf34)
 
 ### Wrap it internally
 
