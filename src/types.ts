@@ -67,6 +67,9 @@ export type ImageWithPreviewProps<T extends React.ElementType> = {
 } & AsProp<T> &
   React.ComponentPropsWithRef<T>
 
+/**
+ * Asset crop data. All values are required.
+ */
 export type CropData = {
   bottom: number
   left: number
@@ -74,11 +77,19 @@ export type CropData = {
   top: number
 }
 
+/**
+ * Asset hotspot data..
+ */
 export type HotspotData = {
   x: number
   y: number
 }
 
+/**
+ * A Sanity asset. This type expects the `_id` field to be set, but in many
+ * cases you will have a `_ref` field instead. This is the same value and is
+ * safe to convert to `_id`.
+ */
 export type Asset = {
   _id: string
   crop?: CropData

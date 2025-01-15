@@ -1,3 +1,4 @@
+export type { Asset, HotspotData, CropData } from "./types"
 export { buildSrc, buildSrcSet } from "./urlBuilder"
 export { ImageWithPreview } from "./ImageWithPreview"
 export { parseImageId } from "./parseImageId"
