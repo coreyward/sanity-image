@@ -189,6 +189,8 @@ comfortable with TypeScript, that might give you more detail.
   the Sanity Image API. See the
   [Sanity Image API documentation](https://www.sanity.io/docs/image-urls) for a
   list of available options.
+- `vanityName` (string) - Optional -  filename to append to the image URL.
+  Sometimes useful for SEO purposes.
 
 That's the gist. There's a ton more in the inline comments and types and such,
 and I'll add more details as I think of them. Feel free to open an issue or

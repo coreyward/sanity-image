@@ -22,6 +22,7 @@ export const SanityImage = <C extends ElementType = "img">({
   width,
   height,
   mode = "contain",
+  vanityName,
 
   // Data for LQIP (preview image)
   preview,
@@ -79,6 +80,7 @@ export const SanityImage = <C extends ElementType = "img">({
     height,
     mode,
     queryParams,
+    vanityName,
   }
 
   const { src, ...outputDimensions } = buildSrc(srcParams)

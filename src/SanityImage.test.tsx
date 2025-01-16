@@ -280,6 +280,33 @@ describe("svg source image", () => {
   })
 })
 
+describe('vanity name', () => {
+  describe('when provided vanityName prop', () => {
+    it('appends vanity name to src and srcset URLs', () => {
+      const vanityName = 'custom-name'
+
+      const { baseElement } = render(
+        <SanityImage
+          id={id}
+          baseUrl={baseUrl}
+          vanityName={vanityName}
+          width={500}
+        />
+      )
+
+      const { src, srcset } = getAttributes(baseElement)
+
+      expect(src).toEqual(
+        `/images/abc123-1000x1000.jpg/${vanityName}?auto=format&fit=max&q=75&w=500`
+      )
+
+      expect(srcset).toEqual(
+        `/images/abc123-1000x1000.jpg/${vanityName}?auto=format&fit=max&q=75&w=250 250w, /images/abc123-1000x1000.jpg/${vanityName}?auto=format&fit=max&q=75&w=500 500w, /images/abc123-1000x1000.jpg/${vanityName}?auto=format&fit=max&q=75&w=750 750w, /images/abc123-1000x1000.jpg/${vanityName}?auto=format&fit=max&q=75&w=1000 1000w`
+      )
+    })
+  })
+})
+
 describe("custom query string params", () => {
   it("supports valid query string params", () => {
     const { baseElement } = render(

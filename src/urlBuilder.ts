@@ -13,6 +13,7 @@ import type {
  */
 export const buildSrc = ({
   baseUrl,
+  vanityName,
   ...inputParams
 }: ImageSrcInputs): ComputedImageData => {
   const { metadata, ...queryParams } = buildQueryParams({
@@ -25,7 +26,9 @@ export const buildSrc = ({
     throw new Error("Missing image output metadata")
   }
 
-  const imageUrl = `${baseUrl}${imageIdToUrlPath(inputParams.id)}`
+  let imageUrl = `${baseUrl}${imageIdToUrlPath(inputParams.id)}`
+  
+  if (vanityName) imageUrl += `/${vanityName}`
 
   return {
     src: `${imageUrl}?${buildQueryString(queryParams)}`,
@@ -42,13 +45,16 @@ export const buildSrcSet = ({
   hotspot,
   crop,
   baseUrl,
+  vanityName,
   ...inputParams
 }: ImageSrcInputs): string[] => {
   // Determine base computed width
   const { w, h } = buildQueryParams({ id, mode, width, height, hotspot, crop })
 
   // URL of the image without any query parameters
-  const imageUrl = `${baseUrl}${imageIdToUrlPath(id)}`
+  let imageUrl = `${baseUrl}${imageIdToUrlPath(id)}`
+  
+  if (vanityName) imageUrl += `/${vanityName}`
 
   // Build srcset
   const srcSetEntries: string[] = dynamicMultipliers(w)
