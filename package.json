@@ -63,7 +63,8 @@
     "postbuild": "./scripts/postbuild.sh",
     "size": "size-limit",
     "test": "jest",
-    "test:generate-measurements": "yarn build && yarn node tests/buildTestCases.js"
+    "test:generate-measurements": "yarn build && yarn node tests/buildTestCases.js",
+    "lint": "eslint src --ext .ts,.tsx"
   },
   "size-limit": [
     {
