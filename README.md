@@ -241,23 +241,51 @@ Here's a visual of this in action:
 
 I recommend creating a wrapper component internally to pass your `baseUrl` prop
 and pass through any props. This keeps the configuration in one place and gives
-you an entry point to add any other logic you might need. Here's a TypeScript
-example (for JavaScript, just remove the type annotation after `props`):
+you an entry point to add any other logic you might need. There's a
+[full `ImageWrapper` example](https://github.com/coreyward/sanity-image/blob/main/examples/ImageWrapper.tsx)
+in the examples folder including comments. Here's a simplified version of that
+example for quick reference:
 
-```tsx
-import { SanityImage } from "sanity-image"
+````tsx
+import * as React from "react"
+import { SanityImage, type SanityImageProps } from "sanity-image"
 
 const projectId = process.env.SANITY_PROJECT_ID
 const dataset = process.env.SANITY_DATASET
 const baseUrl = `https://cdn.sanity.io/images/${projectId}/${dataset}/`
 
-export const Image = (
-  props: Omit<
-    React.ComponentProps<typeof SanityImage>,
-    "baseUrl" | "dataset" | "projectId"
-  >
+/**
+ * These props are set automatically in this wrapper component, so we don't want
+ * them to be passed by consuming code.
+ */
+type ConfigurationProps = "baseUrl" | "dataset" | "projectId"
+
+/**
+ * Set the specified configuration props to `never` so that they can't be passed
+ * by consuming code.
+ */
+type ExcludeConfigurationProps = Partial<Record<ConfigurationProps, never>>
+
+/**
+ * A wrapper around `SanityImage` that configures the `baseUrl` prop
+ * automatically.
+ *
+ * Simple usage:
+ * @example
+ * ```tsx
+ * <Image
+ *   id={image._id}
+ *   hotspot={...}
+ *   crop={...}
+ *   width={450} // anticipated display width of the image
+ *   alt="Some alt text. Can be dynamic/computed."
+ * />
+ * ```
+ */
+export const Image = <T extends React.ElementType = "img">(
+  props: SanityImageProps<T> & ExcludeConfigurationProps
 ) => <SanityImage baseUrl={baseUrl} {...props} />
-```
+````
 
 ### Styling your images
 
