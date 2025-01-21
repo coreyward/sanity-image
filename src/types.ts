@@ -1,54 +1,86 @@
-import type { AsProp } from "./polymorphic-voodoo"
-export type {
-  AsProp,
-  PropsOf,
-  ExtendableProps,
-  InheritableElementProps,
-  PolymorphicComponentProps,
-} from "./polymorphic-voodoo"
+/**
+ * The `as` prop allows for overriding the default element type of the
+ * component.
+ */
+export type AsProp<T extends React.ElementType> = {
+  /**
+   * By default, the component will render an `<img>` tag. You can override this
+   * by passing a different component or HTML tag name.
+   */
+  as?: T
+}
 
-export type SanityImageProps = ImageQueryInputs & {
+/**
+ * Allows for extending a set of props (`ExtendedProps`) by an overriding set of
+ * props (`OverrideProps`), ensuring that any duplicates are overridden by the
+ * overriding set of props.
+ */
+export type ExtendableProps<
+  ExtendedProps = object,
+  OverrideProps = object
+> = OverrideProps & Omit<ExtendedProps, keyof OverrideProps>
+
+/**
+ * Allows for inheriting the props from the specified element type so that props
+ * like children, className & style work, as well as element-specific attributes
+ * like aria roles.
+ */
+export type InheritableElementProps<
+  T extends React.ElementType,
+  Props = object
+> = ExtendableProps<React.ComponentPropsWithoutRef<T>, Props>
+
+/**
+ * A more sophisticated version of `InheritableElementProps` where the passed in
+ * `as` prop will determine which props can be included
+ */
+export type PolymorphicComponentProps<
+  T extends React.ElementType,
+  Props = object
+> = InheritableElementProps<T, Props & AsProp<T>>
+
+/**
+ * Base props for SanityImage. This represents all Sanity-specific fields that
+ * can be provided without any of the React element attributes/props.
+ */
+export type SanityImageBaseProps = ImageQueryInputs & {
   preview?: string
 
   /**
-   * The base url for the Sanity CDN including project ID and dataset. If not
-   * provided, the `projectId` and `dataset` props will be used to construct the
-   * URL.
+   * The base URL for the Sanity CDN. If not provided, the `projectId` and
+   * `dataset` props will be used to construct the URL.
    */
   baseUrl?: string
 
   /**
-   * The Sanity project ID to use for the image URL. If preferred, the `baseUrl`
-   * prop can be provided instead.
+   * The Sanity project ID to use. If preferred, provide `baseUrl` instead.
    */
   projectId?: string
 
   /**
-   * The Sanity dataset to use for the image URL. If preferred, the `baseUrl`
-   * prop can be provided instead.
+   * The Sanity dataset to use. If preferred, provide `baseUrl` instead.
    */
   dataset?: string
 
   /**
-   * `alt` attribute for the image; set to an empty string if not provided.
-   */
-  // alt?: string
-
-  /**
-   * Passed through to the <img> tag as `height`, overriding the `aspectRatio`
-   * option, if enabled.
+   * Passed through to the rendered element as `height`, overriding the default
+   * behavior of setting the `height` property automatically based on the
+   * computed output image dimensions.
    */
   htmlHeight?: number
 
   /**
-   * Passed through to the <img> tag as `width`, overriding the `aspectRatio`
-   * option, if enabled.
+   * Passed through to the rendered element as `width`, overriding the default
+   * behavior of setting the `width` property automatically based on the
+   * computed output image dimensions.
    */
   htmlWidth?: number
 
   /**
-   * Passed through to the <img> tag as `id` since the `id` prop is reserved for
-   * the Sanity image asset ID.
+   * Passed through to the rendered element as `id`.
+   *
+   * The `id` prop is used to specify the Sanity Image ID, so this is the only
+   * way to set the `id` attribute on the rendered element.
    */
   htmlId?: string
 
@@ -61,6 +93,12 @@ export type SanityImageProps = ImageQueryInputs & {
    */
   queryParams?: DirectQueryParams
 }
+
+/**
+ * Props type for the polymorphic <SanityImage> component.
+ */
+export type SanityImageProps<T extends React.ElementType> =
+  PolymorphicComponentProps<T, SanityImageBaseProps>
 
 export type ImageWithPreviewProps<T extends React.ElementType> = {
   preview: string

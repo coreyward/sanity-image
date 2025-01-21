@@ -1,9 +1,9 @@
 import React, { type ElementType, type ComponentPropsWithoutRef } from "react"
-import type { PolymorphicComponentProps, SanityImageProps } from "./types"
+import type { SanityImageProps } from "./types"
 import { buildSrc, buildSrcSet, buildSvgAttributes } from "./urlBuilder"
 import { ImageWithPreview } from "./ImageWithPreview"
 
-export const SanityImage = <C extends ElementType = "img">({
+export const SanityImage = <T extends ElementType = "img">({
   as: component,
 
   // Sanity url
@@ -32,7 +32,7 @@ export const SanityImage = <C extends ElementType = "img">({
 
   // Any remaining props are passed through to the rendered component
   ...rest
-}: PolymorphicComponentProps<C, SanityImageProps>) => {
+}: SanityImageProps<T>) => {
   if (!id) throw new Error("Missing required `id` prop for <SanityImage>.")
   if (!baseUrl && (!projectId || !dataset))
     throw new Error(

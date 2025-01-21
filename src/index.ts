@@ -1,4 +1,10 @@
-export type { Asset, HotspotData, CropData } from "./types"
+export type {
+  Asset,
+  HotspotData,
+  CropData,
+  SanityImageBaseProps,
+  SanityImageProps,
+} from "./types"
 export { buildSrc, buildSrcSet } from "./urlBuilder"
 export { ImageWithPreview } from "./ImageWithPreview"
 export { parseImageId } from "./parseImageId"
