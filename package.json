@@ -4,14 +4,14 @@
   "author": "Corey Ward <corey@hey.com>",
   "license": "MIT",
   "repository": "https://github.com/coreyward/sanity-image",
+  "types": "dist/index.d.ts",
   "main": "dist/cjs/index.js",
   "module": "dist/mjs/index.js",
-  "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/mjs/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/cjs/index.js"
     }
   },
   "files": [
