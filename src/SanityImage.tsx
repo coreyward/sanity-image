@@ -57,12 +57,19 @@ export const SanityImage = <T extends ElementType = "img">({
     // Sanity ignores all transformations for SVGs, so we can just render the
     // component without passing a query string and without doing anything for
     // the preview.
-    return (
-      <ImageComponent
-        {...buildSvgAttributes({ id, baseUrl })}
-        {...componentProps}
-      />
-    )
+    const baseAttributes: Record<string, unknown> = buildSvgAttributes({
+      id,
+      baseUrl,
+    })
+
+    // If this is a <source> element, we need to set the `srcSet` attribute and not
+    // the `src` attribute, otherwise it will be ignored in <picture> elements.
+    if (component === "source") {
+      baseAttributes.srcSet = baseAttributes.src
+      delete baseAttributes.src
+    }
+
+    return <ImageComponent {...baseAttributes} {...componentProps} />
   }
 
   // Create default src and build srcSet

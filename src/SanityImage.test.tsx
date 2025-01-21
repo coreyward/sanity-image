@@ -278,6 +278,26 @@ describe("svg source image", () => {
     expect(height).toEqual("100")
     expect(alt).toEqual("Still get dat alt tho")
   })
+
+  it("sets srcSet instead of src when used as source element", () => {
+    const svgId = "image-abc123-300x100-svg"
+
+    const { baseElement } = render(
+      <SanityImage
+        as="source"
+        id={svgId}
+        width={2000}
+        height={1000}
+        baseUrl={baseUrl}
+        mode="cover"
+      />
+    )
+
+    const source = baseElement.querySelector("source")
+    expect(source).toBeTruthy()
+    expect(source?.getAttribute("src")).toBeNull()
+    expect(source?.getAttribute("srcset")).toBe("/images/abc123-300x100.svg")
+  })
 })
 
 describe("custom query string params", () => {
