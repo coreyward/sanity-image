@@ -15,7 +15,7 @@ esbuild
     ...sharedConfig,
     format: "cjs",
     platform: "node",
-    target: ["node12"],
+    target: ["node16"],
     outdir: "dist/cjs",
   })
   .catch(() => process.exit(1))
@@ -25,7 +25,7 @@ esbuild
   .build({
     ...sharedConfig,
     format: "esm",
-    target: ["es2019"],
+    target: ["es2022"],
     splitting: true,
     outdir: "dist/mjs",
   })
