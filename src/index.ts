@@ -2,8 +2,8 @@ export type {
   Asset,
   HotspotData,
   CropData,
-  SanityImageBaseProps,
   SanityImageProps,
+  WrapperProps,
 } from "./types"
 export { buildSrc, buildSrcSet } from "./urlBuilder"
 export { ImageWithPreview } from "./ImageWithPreview"
