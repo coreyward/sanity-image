@@ -238,53 +238,50 @@ Here's a visual of this in action:
 
 ### Wrap it internally
 
-I recommend creating a wrapper component internally to pass your `baseUrl` prop
-and pass through any props. This keeps the configuration in one place and gives
-you an entry point to add any other logic you might need. There's a
+To improve the DX of using `sanity-image`, create a wrapper component in your
+app that sets the `baseUrl` prop (or `projectId` and `dataset`). This keeps the
+configuration in one place and gives you an entry point to add any other logic
+you might need. There's a
 [full `ImageWrapper` example](https://github.com/coreyward/sanity-image/blob/main/examples/ImageWrapper.tsx)
 in the examples folder including comments. Here's a simplified version of that
 example for quick reference:
 
-````tsx
+```tsx
 import * as React from "react"
-import { SanityImage, type SanityImageProps } from "sanity-image"
+import { SanityImage, type WrapperPRops } from "sanity-image"
 
-const projectId = process.env.SANITY_PROJECT_ID
-const dataset = process.env.SANITY_DATASET
-const baseUrl = `https://cdn.sanity.io/images/${projectId}/${dataset}/`
-
-/**
- * These props are set automatically in this wrapper component, so we don't want
- * them to be passed by consuming code.
- */
-type ConfigurationProps = "baseUrl" | "dataset" | "projectId"
-
-/**
- * Set the specified configuration props to `never` so that they can't be passed
- * by consuming code.
- */
-type ExcludeConfigurationProps = Partial<Record<ConfigurationProps, never>>
-
-/**
- * A wrapper around `SanityImage` that configures the `baseUrl` prop
- * automatically.
- *
- * Simple usage:
- * @example
- * ```tsx
- * <Image
- *   id={image._id}
- *   hotspot={...}
- *   crop={...}
- *   width={450} // anticipated display width of the image
- *   alt="Some alt text. Can be dynamic/computed."
- * />
- * ```
- */
 export const Image = <T extends React.ElementType = "img">(
-  props: SanityImageProps<T> & ExcludeConfigurationProps
-) => <SanityImage baseUrl={baseUrl} {...props} />
-````
+  props: WrapperProps<T>
+) => <SanityImage baseUrl="<your-baseurl-here>" {...props} />
+```
+
+<details>
+  <summary>👩‍🎤 Using Emotion’s `jsxImportSource`? Read this.</summary>
+
+When you set the `jsxImportSource` to `@emotion/react` it replaces some core
+React types with those of its own. This allows Emotion’s polymorphic components
+to work, but it also makes typing a polymorphic component like `<SanityImage>` a
+bit harder. This is okay when it's used directly, but the wrapper approach winds
+up breaking it—the use of `Omit` to remove configuration props breaks the
+polymorphism and prompts TS to complain about unexpected props.
+
+I am not a TS wizard, alas, and despite lots of reading and attempting to make
+something that works out of the box for Emotion, I have not managed to do so.
+Instead I recommend using `@ts-expect-error` on the `<SanityImage>` line in your
+wrapper. This will tell TS to ignore the props we're passing in, but it will
+still ensure your in-app `<Image>` component works as expected with full
+polymorphic type support.
+
+```tsx
+export const Image = <T extends React.ElementType = "img">(
+  props: WrapperProps<T>
+) => (
+  /* @ts-expect-error Emotion types are incompatible with polymorphic component */
+  <SanityImage baseUrl="<your-baseurl-here>" {...props} />
+)
+```
+
+</details>
 
 ### Styling your images
 

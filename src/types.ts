@@ -1,57 +1,8 @@
 /**
- * The `as` prop allows for overriding the default element type of the
- * component.
+ * These props tell `SanityImage` about your Sanity project in order to build
+ * the full URLs to your images from their `_id`.
  */
-export type AsProp<T extends React.ElementType> = {
-  /**
-   * By default, the component will render an `<img>` tag. You can override this
-   * by passing a different component or HTML tag name.
-   */
-  as?: T
-}
-
-/**
- * Allows for extending a set of props (`ExtendedProps`) by an overriding set of
- * props (`OverrideProps`), ensuring that any duplicates are overridden by the
- * overriding set of props.
- */
-export type ExtendableProps<
-  ExtendedProps = object,
-  OverrideProps = object
-> = OverrideProps & Omit<ExtendedProps, keyof OverrideProps>
-
-/**
- * Allows for inheriting the props from the specified element type so that props
- * like children, className & style work, as well as element-specific attributes
- * like aria roles.
- */
-export type InheritableElementProps<
-  T extends React.ElementType,
-  Props = object
-> = ExtendableProps<React.ComponentPropsWithoutRef<T>, Props>
-
-/**
- * A more sophisticated version of `InheritableElementProps` where the passed in
- * `as` prop will determine which props can be included
- */
-export type PolymorphicComponentProps<
-  T extends React.ElementType,
-  Props = object
-> = InheritableElementProps<T, Props & AsProp<T>>
-
-/**
- * Base props for SanityImage. This represents all Sanity-specific fields that
- * can be provided without any of the React element attributes/props.
- */
-export type SanityImageBaseProps = ImageQueryInputs & {
-  preview?: string
-
-  /**
-   * The base URL for the Sanity CDN. If not provided, the `projectId` and
-   * `dataset` props will be used to construct the URL.
-   */
-  baseUrl?: string
-
+export type SanityImageConfigurationProps = {
   /**
    * The Sanity project ID to use. If preferred, provide `baseUrl` instead.
    */
@@ -62,6 +13,19 @@ export type SanityImageBaseProps = ImageQueryInputs & {
    */
   dataset?: string
 
+  /**
+   * The base URL for the Sanity CDN. If not provided, the `projectId` and
+   * `dataset` props will be used to construct the URL.
+   */
+  baseUrl?: string
+}
+
+/**
+ * SanityImage accepts some props that conflict with native `<img>` attributes.
+ * In order to set these attributes on the rendered element, these
+ * `html`-prefixed props are provided.
+ */
+export type SanityImageAttributeOverrideProps = {
   /**
    * Passed through to the rendered element as `height`, overriding the default
    * behavior of setting the `height` property automatically based on the
@@ -83,27 +47,57 @@ export type SanityImageBaseProps = ImageQueryInputs & {
    * way to set the `id` attribute on the rendered element.
    */
   htmlId?: string
-
-  /**
-   * Query string params to pass to Sanity's image CDN directly. Note that this
-   * is only a subset of the params supported by the Sanity image CDN. Many are
-   * set automatically by this library, and several others result in behavior
-   * you probably don't want. If you need something and have a compelling use
-   * case, please open an issue and I'd be delighted to consider it.
-   */
-  queryParams?: DirectQueryParams
 }
 
 /**
- * Props type for the polymorphic <SanityImage> component.
+ * Props for the `SanityImage` component itself. Does not include any props that
+ * are used to build the underlying URLs.
  */
-export type SanityImageProps<T extends React.ElementType> =
-  PolymorphicComponentProps<T, SanityImageBaseProps>
+export type SanityImageComponentProps = {
+  preview?: string
+}
 
-export type ImageWithPreviewProps<T extends React.ElementType> = {
-  preview: string
-} & AsProp<T> &
-  React.ComponentPropsWithRef<T>
+/**
+ * All image-rendering props.
+ */
+export type BaseImageProps = SanityImageAttributeOverrideProps &
+  SanityImageComponentProps &
+  ImageQueryInputs
+
+/**
+ * Configuration props + image-rendering props.
+ */
+export type FullImageProps = BaseImageProps & SanityImageConfigurationProps
+
+/**
+ * Props supporting polymorphic rendering; enables conditional typing based on
+ * the `as` prop.
+ */
+export type PolymorphicProps<T extends React.ElementType> = {
+  as?: T
+} & Omit<React.ComponentPropsWithoutRef<T>, keyof FullImageProps | "as">
+
+/**
+ * Props for the image wrapper recommended for use in consuming apps. This
+ * excludes configuration props, enabling your components to render an image
+ * without specifying the `baseUrl` or the `projectId` and `dataset`.
+ */
+export type WrapperProps<
+  T extends React.ElementType,
+  ConfigProps extends string = keyof SanityImageConfigurationProps
+> = Omit<BaseImageProps, ConfigProps> & PolymorphicProps<T>
+
+/**
+ * Combined props for the `SanityImage` component with polymorphism.
+ */
+export type SanityImageProps<T extends React.ElementType> = FullImageProps &
+  PolymorphicProps<T>
+
+/**
+ * Combined props for the `ImageWithPreview` component with polymorphism.
+ */
+export type SanityImageWithPreviewProps<T extends React.ElementType> =
+  PolymorphicProps<T> & { preview: string }
 
 /**
  * Asset crop data. All values are required.
@@ -184,6 +178,9 @@ export type DirectQueryParams = {
   sharpen?: number
 }
 
+/**
+ * Parameters used in determining the image URLs generated by SanityImage.
+ */
 export type ImageQueryInputs = {
   /** The Sanity Image ID (`_id` or `_ref` field value) */
   id: string
@@ -219,6 +216,13 @@ export type ImageQueryInputs = {
   /** The crop coordinates to use for the image. */
   crop?: CropData
 
+  /**
+   * Query string params to pass to Sanity's image CDN directly. Note that this
+   * is only a subset of the params supported by the Sanity image CDN. Many are
+   * set automatically by this library, and several others result in behavior
+   * you probably don't want. If you need something and have a compelling use
+   * case, please open an issue and I'd be delighted to consider it.
+   */
   queryParams?: DirectQueryParams
 }
 

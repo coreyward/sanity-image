@@ -1,9 +1,9 @@
-import React, { type ElementType, type ComponentPropsWithoutRef } from "react"
+import React from "react"
 import type { SanityImageProps } from "./types"
 import { buildSrc, buildSrcSet, buildSvgAttributes } from "./urlBuilder"
 import { ImageWithPreview } from "./ImageWithPreview"
 
-export const SanityImage = <T extends ElementType = "img">({
+export const SanityImage = <T extends React.ElementType = "img">({
   as: component,
 
   // Sanity url
@@ -46,7 +46,7 @@ export const SanityImage = <T extends ElementType = "img">({
   const ImageComponent =
     preview && !isSvg ? ImageWithPreview : component ?? "img"
 
-  const componentProps: ComponentPropsWithoutRef<typeof ImageComponent> = {
+  const componentProps: Record<string, unknown> = {
     alt: rest.alt ?? "",
     loading: rest.loading ?? "lazy",
     id: htmlId,

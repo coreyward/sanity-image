@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import type { ImageWithPreviewProps } from "./types"
+import type { SanityImageWithPreviewProps } from "./types"
 
 /**
  * Renders two image tags, one with the preview image and one with the full
@@ -12,7 +12,7 @@ export const ImageWithPreview = <T extends React.ElementType = "img">({
   style,
   alt,
   ...props
-}: ImageWithPreviewProps<T>) => {
+}: SanityImageWithPreviewProps<T>) => {
   const [loaded, setLoaded] = useState(false)
   const ref = useRef<HTMLImageElement>(null)
 
