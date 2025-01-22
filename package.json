@@ -19,7 +19,7 @@
   ],
   "sideEffects": false,
   "peerDependencies": {
-    "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
+    "react": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
@@ -65,6 +65,9 @@
     "test": "jest",
     "test:generate-measurements": "yarn build && yarn node tests/buildTestCases.js",
     "lint": "eslint src --ext .ts,.tsx"
+  },
+  "engines": {
+    "node": ">=16"
   },
   "size-limit": [
     {

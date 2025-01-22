@@ -9,10 +9,10 @@
     "exactOptionalPropertyTypes": false,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "jsx": "react",
-    "lib": ["DOM", "DOM.Iterable", "ES2019"],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "outDir": "dist",
@@ -20,7 +20,7 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "strict": true,
-    "target": "ES2019",
+    "target": "ES2022",
     "types": ["node", "jest"],
     "useUnknownInCatchVariables": true
   }
