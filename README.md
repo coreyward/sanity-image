@@ -1,7 +1,6 @@
 # sanity-image
 
 [![Latest version](https://img.shields.io/npm/v/sanity-image?label=version&color=brightGreen&logo=npm)](https://www.npmjs.com/package/sanity-image)
-![Dependency status](https://img.shields.io/librariesio/release/npm/sanity-image)
 [![Open issues](https://img.shields.io/github/issues/coreyward/sanity-image)](https://github.com/coreyward/sanity-image/issues)
 ![React version compatibility](https://img.shields.io/badge/dynamic/json?color=blue&label=react%20versions&query=peerDependencies.react&url=https%3A%2F%2Fraw.githubusercontent.com%2Fcoreyward%2Fsanity-image%2Fmain%2Fpackage.json)
 
