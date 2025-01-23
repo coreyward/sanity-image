@@ -1,4 +1,3 @@
-import React from "react"
 import type { SanityImageProps } from "./types"
 import { buildSrc, buildSrcSet, buildSvgAttributes } from "./urlBuilder"
 import { ImageWithPreview } from "./ImageWithPreview"
