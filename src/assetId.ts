@@ -1,10 +1,4 @@
-type AssetLike =
-  | {
-      _id: string
-    }
-  | {
-      _ref: string
-    }
+type AssetLike = { _id: string } | { _ref: string }
 
 /**
  * Get the asset ID of a Sanity image asset whether it has an `_id` or `_ref`
@@ -22,7 +16,6 @@ export const assetId = (asset: AssetLike) =>
 export const normalizeAssetId = <T extends Record<string, unknown>>(
   asset: AssetLike & T
 ): Omit<T, "_ref"> & { _id: string } => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { _ref, ...rest } = asset
   return { ...rest, _id: assetId(asset) }
 }

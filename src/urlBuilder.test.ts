@@ -1,4 +1,3 @@
-import type { ImageQueryParams } from "./types"
 import {
   buildSrcSet,
   buildQueryParams,
@@ -190,7 +189,7 @@ describe("buildQueryParams", () => {
       buildQueryParams({
         id: image.asset._id,
       })
-    ).toEqual(<ImageQueryParams>{ w: 500, fit: "max", q: 75, auto: "format" })
+    ).toEqual({ w: 500, fit: "max", q: 75, auto: "format" })
   })
 
   describe("contain", () => {
@@ -200,7 +199,12 @@ describe("buildQueryParams", () => {
           id: image.asset._id,
           height: 500,
         })
-      ).toEqual(<ImageQueryParams>{ w: 500, fit: "max", q: 75, auto: "format" })
+      ).toEqual({
+        w: 500,
+        fit: "max",
+        q: 75,
+        auto: "format",
+      })
     })
 
     it("doesn't upscale", () => {
@@ -209,7 +213,7 @@ describe("buildQueryParams", () => {
           id: image.asset._id,
           width: 2000,
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         w: 1000,
         fit: "max",
         q: 75,
@@ -221,7 +225,7 @@ describe("buildQueryParams", () => {
           id: image.asset._id,
           height: 5000,
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         w: 1000,
         fit: "max",
         q: 75,
@@ -236,7 +240,7 @@ describe("buildQueryParams", () => {
           crop: image.crop,
           width: 2000,
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         rect: "0,0,750,750",
         w: 750,
         fit: "max",
@@ -252,7 +256,7 @@ describe("buildQueryParams", () => {
           crop: image.crop,
           width: 375,
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         rect: "0,0,750,750",
         w: 375,
         fit: "max",
@@ -268,7 +272,7 @@ describe("buildQueryParams", () => {
           width: 1000,
           height: 500,
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         w: 500, // width adjusted to respect `height` constraint at source aspect ratio
         fit: "max",
         q: 75,
@@ -282,7 +286,7 @@ describe("buildQueryParams", () => {
           width: 2000,
           height: 500,
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         rect: "0,0,750,750",
         w: 500,
         fit: "max",
@@ -301,7 +305,7 @@ describe("buildQueryParams", () => {
           height: 375,
           mode: "cover",
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         crop: "entropy",
         w: 200,
         h: 375,
@@ -320,7 +324,7 @@ describe("buildQueryParams", () => {
           height: 1000,
           mode: "cover",
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         crop: "entropy",
         rect: "0,0,750,750",
         w: 750,
@@ -338,7 +342,7 @@ describe("buildQueryParams", () => {
           height: 2000,
           mode: "cover",
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         crop: "entropy",
         rect: "0,0,750,750",
         w: 375,
@@ -355,7 +359,7 @@ describe("buildQueryParams", () => {
           height: 2000,
           mode: "cover",
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         crop: "entropy",
         w: 500,
         h: 1000,
@@ -374,7 +378,7 @@ describe("buildQueryParams", () => {
           mode: "cover",
           hotspot: image.hotspot,
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         "fp-x": 0.25,
         "fp-y": 0.25,
         w: 375,
@@ -395,7 +399,7 @@ describe("buildQueryParams", () => {
           mode: "cover",
           hotspot: image.hotspot,
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         rect: "0,0,750,750",
         "fp-x": 0.333,
         "fp-y": 0.333,
@@ -423,7 +427,7 @@ describe("buildQueryParams", () => {
             y: 0.5,
           },
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         rect: "500,500,500,500",
         "fp-x": 0,
         "fp-y": 0,
@@ -445,7 +449,7 @@ describe("buildQueryParams", () => {
           mode: "cover",
           hotspot: { x: 1, y: 1 },
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         rect: "300,0,700,800",
         "fp-x": 1,
         "fp-y": 1,
@@ -465,7 +469,7 @@ describe("buildQueryParams", () => {
           mode: "cover",
           hotspot: { x: 1, y: 1 },
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         rect: "300,0,700,800",
         "fp-x": 1,
         "fp-y": 1,
@@ -486,7 +490,7 @@ describe("buildQueryParams", () => {
           height: 100,
           mode: "cover",
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         rect: "0,0,750,750",
         w: 375,
         h: 100,
@@ -506,7 +510,7 @@ describe("buildQueryParams", () => {
           height: 500,
           mode: "cover",
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         rect: "0,0,750,750",
         w: 500,
         fit: "max",
@@ -523,7 +527,7 @@ describe("buildQueryParams", () => {
           id: image.asset._id,
           options: { includeMetadata: true },
         }).metadata
-      ).toEqual(<ImageQueryParams["metadata"]>{
+      ).toEqual({
         sourceDimensions: { width: 1000, height: 1000, aspectRatio: 1 },
         outputDimensions: { width: 500, height: 500, aspectRatio: 1 },
       })
@@ -537,7 +541,7 @@ describe("buildQueryParams", () => {
           mode: "cover",
           options: { includeMetadata: true },
         }).metadata
-      ).toEqual(<ImageQueryParams["metadata"]>{
+      ).toEqual({
         sourceDimensions: { width: 1000, height: 1000, aspectRatio: 1 },
         outputDimensions: { width: 750, height: 375, aspectRatio: 2 },
       })
@@ -551,7 +555,7 @@ describe("buildQueryParams", () => {
           mode: "contain",
           options: { includeMetadata: true },
         }).metadata
-      ).toEqual(<ImageQueryParams["metadata"]>{
+      ).toEqual({
         sourceDimensions: { width: 1000, height: 1000, aspectRatio: 1 },
         outputDimensions: { width: 750, height: 750, aspectRatio: 1 },
       })
@@ -565,7 +569,7 @@ describe("buildQueryParams", () => {
           mode: "contain",
           options: { includeMetadata: true },
         }).metadata
-      ).toEqual(<ImageQueryParams["metadata"]>{
+      ).toEqual({
         sourceDimensions: { width: 1000, height: 1000, aspectRatio: 1 },
         outputDimensions: { width: 500, height: 500, aspectRatio: 1 },
       })
@@ -595,7 +599,7 @@ describe("buildQueryParams", () => {
             sharpen: 42,
           },
         })
-      ).toEqual(<ImageQueryParams>{
+      ).toEqual({
         blur: 20,
         fit: "max",
         flip: "hv",

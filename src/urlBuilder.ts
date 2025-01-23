@@ -183,9 +183,11 @@ export const buildQueryParams = ({
   // use an object or map instead of URLSearchParams, since the latter will
   // allow multiple params with the same name, which is not supported by the
   // Sanity Image API.
-  const params: Partial<ImageQueryParams> = {
+  const params: ImageQueryParams = {
     w: width,
     q: 75,
+    // Default fit mode; overriden for `mode=cover` below
+    fit: "max",
     ...queryParams,
   }
 
@@ -220,15 +222,13 @@ export const buildQueryParams = ({
       // If no hotspot is provided, use Sanity’s `entropy` crop mode
       params.crop = "entropy"
     }
-  } else {
-    params.fit = "max"
   }
 
   if (includeMetadata) {
     // Height will be set if the aspect ratio varies from `sourceAspectRatio`
-    const outputHeight = height || Math.round(width / sourceAspectRatio)
+    const outputHeight = height ?? Math.round(width / sourceAspectRatio)
 
-    params.metadata = <ImageQueryParams["metadata"]>{
+    params.metadata = {
       sourceDimensions,
       outputDimensions: {
         width,
@@ -238,7 +238,7 @@ export const buildQueryParams = ({
     }
   }
 
-  return <ImageQueryParams>params
+  return params
 }
 
 const clamp = (value: number, min: number, max: number): number =>
@@ -250,11 +250,11 @@ const roundWithPrecision = (value: number, precision: number): number =>
 export const croppedImageSize = (
   /** Source/original image dimensions */
   dimensions: { width: number; height: number },
-  crop: CropData
+  crop: CropData,
 ): ImageIdParts["dimensions"] => {
   if (crop.left + crop.right >= 1 || crop.top + crop.bottom >= 1) {
     throw new Error(
-      `Invalid crop: ${JSON.stringify(crop)}; crop values must be less than 1`
+      `Invalid crop: ${JSON.stringify(crop)}; crop values must be less than 1`,
     )
   }
 
@@ -271,7 +271,7 @@ export const croppedImageSize = (
 export const buildRect = (
   /** Source/original image dimensions */
   dimensions: { width: number; height: number },
-  crop: CropData
+  crop: CropData,
 ): string => {
   const { width, height } = croppedImageSize(dimensions, crop)
 
@@ -291,12 +291,12 @@ export const buildRect = (
 export const buildQueryString = (
   params: Partial<{
     [K in keyof Omit<ImageQueryParams, "metadata">]: ImageQueryParams[K]
-  }>
+  }>,
 ): string => {
   const searchParams = new URLSearchParams(
     Object.entries(params)
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([key, value]) => [key, String(value)])
+      .map(([key, value]) => [key, String(value)]),
   )
 
   return searchParams.toString().replace(/%2C/g, ",") // don't urlencode commas
