@@ -2,9 +2,7 @@ import React from "react"
 import { render, fireEvent } from "@testing-library/react"
 import { ImageWithPreview } from "./ImageWithPreview"
 
-const getImages = (container: HTMLElement) => {
-  return container.querySelectorAll("img")
-}
+const getImages = (container: HTMLElement) => container.querySelectorAll("img")
 
 describe("ImageWithPreview", () => {
   it("renders both preview and full images initially", () => {
@@ -20,22 +18,29 @@ describe("ImageWithPreview", () => {
     const images = getImages(container)
     expect(images.length).toBe(2)
 
+    const [previewImage, fullImage] = images
+
+    expect(previewImage).toBeDefined()
+    expect(fullImage).toBeDefined()
+
     // Check preview image
-    expect(images[0].getAttribute("src")).toBe(
+    expect(previewImage.getAttribute("src")).toBe(
       "data:image/jpeg;base64,/9j/preview"
     )
-    expect(images[0].getAttribute("data-lqip")).toBe("true")
-    expect(images[0].getAttribute("style")).toContain("border: 1px solid red")
-    expect(images[0].getAttribute("alt")).toBe("Test image")
+    expect(previewImage.getAttribute("data-lqip")).toBe("true")
+    expect(previewImage.getAttribute("style")).toContain(
+      "border: 1px solid red"
+    )
+    expect(previewImage.getAttribute("alt")).toBe("Test image")
 
     // Check full image
-    expect(images[1].getAttribute("src")).toBe("/images/abc123-1000x1000.jpg")
-    expect(images[1].getAttribute("data-loading")).toBe("true")
-    expect(images[1].getAttribute("style")).toContain("height: 10px")
-    expect(images[1].getAttribute("style")).toContain("width: 10px")
-    expect(images[1].getAttribute("style")).toContain("opacity: 0")
-    expect(images[1].getAttribute("style")).toContain("border: 1px solid red")
-    expect(images[1].getAttribute("alt")).toBe("")
+    expect(fullImage.getAttribute("src")).toBe("/images/abc123-1000x1000.jpg")
+    expect(fullImage.getAttribute("data-loading")).toBe("true")
+    expect(fullImage.getAttribute("style")).toContain("height: 10px")
+    expect(fullImage.getAttribute("style")).toContain("width: 10px")
+    expect(fullImage.getAttribute("style")).toContain("opacity: 0")
+    expect(fullImage.getAttribute("style")).toContain("border: 1px solid red")
+    expect(fullImage.getAttribute("alt")).toBe("")
   })
 
   it("removes preview and shows full image after load", () => {

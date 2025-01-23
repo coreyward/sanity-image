@@ -1,6 +1,13 @@
 {
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "examples/**/*.ts",
+    "examples/**/*.tsx"
+  ],
+  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "allowJs": true,
     "declaration": true,
