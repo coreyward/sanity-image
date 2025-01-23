@@ -33,14 +33,18 @@ export const ImageWithPreview = <T extends React.ElementType = "img">({
     <>
       {!loaded && (
         <Img
-          alt={loaded ? "" : alt}
-          className={props.className}
-          data-lqip
-          height={props.height}
-          id={props.id}
           src={preview}
-          style={style}
+          alt={loaded ? "" : alt}
+          id={props.id}
+          className={props.className}
           width={props.width}
+          height={props.height}
+          style={{
+            // Set the aspect ratio to match the full image
+            aspectRatio: `${props.width} / ${props.height}`,
+            ...style,
+          }}
+          data-lqip
         />
       )}
       <Img
