@@ -21,10 +21,11 @@ export const ImageWithPreview = <T extends React.ElementType = "img">({
   }
 
   useEffect(() => {
+    // If the image is already loaded when mounted, call onLoad
     if (ref.current?.complete) {
       onLoad()
     }
-  })
+  }, [])
 
   const Img = as || "img"
 
