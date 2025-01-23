@@ -43,7 +43,7 @@ export const SanityImage = <T extends React.ElementType = "img">({
   const isSvg = id.endsWith("-svg")
 
   const ImageComponent =
-    preview && !isSvg ? ImageWithPreview : component ?? "img"
+    preview && !isSvg ? ImageWithPreview : (component ?? "img")
 
   const componentProps: Record<string, unknown> = {
     alt: rest.alt ?? "",

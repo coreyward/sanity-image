@@ -1,4 +1,5 @@
 {
   "proseWrap": "always",
-  "semi": false
+  "semi": false,
+  "trailingComma": "es5"
 }

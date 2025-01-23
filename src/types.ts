@@ -84,7 +84,7 @@ export type PolymorphicProps<T extends React.ElementType> = {
  */
 export type WrapperProps<
   T extends React.ElementType,
-  ConfigProps extends string = keyof SanityImageConfigurationProps
+  ConfigProps extends string = keyof SanityImageConfigurationProps,
 > = Omit<BaseImageProps, ConfigProps> & PolymorphicProps<T>
 
 /**
@@ -232,7 +232,7 @@ export type ImageQueryParams = DirectQueryParams & {
   /**
    * Enables support for serving alternate image formats to supporting browsers
    **/
-  auto: "format"
+  auto?: "format"
 
   /**
    * SanityImage `cover` mode → `fit=crop`; SanityImage `contain` mode →

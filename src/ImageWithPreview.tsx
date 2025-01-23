@@ -27,7 +27,7 @@ export const ImageWithPreview = <T extends React.ElementType = "img">({
     }
   }, [])
 
-  const Img = as || "img"
+  const Img = as ?? "img"
 
   return (
     <>
