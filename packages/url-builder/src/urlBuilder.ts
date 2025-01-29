@@ -250,11 +250,11 @@ const roundWithPrecision = (value: number, precision: number): number =>
 export const croppedImageSize = (
   /** Source/original image dimensions */
   dimensions: { width: number; height: number },
-  crop: CropData,
+  crop: CropData
 ): ImageIdParts["dimensions"] => {
   if (crop.left + crop.right >= 1 || crop.top + crop.bottom >= 1) {
     throw new Error(
-      `Invalid crop: ${JSON.stringify(crop)}; crop values must be less than 1`,
+      `Invalid crop: ${JSON.stringify(crop)}; crop values must be less than 1`
     )
   }
 
@@ -271,7 +271,7 @@ export const croppedImageSize = (
 export const buildRect = (
   /** Source/original image dimensions */
   dimensions: { width: number; height: number },
-  crop: CropData,
+  crop: CropData
 ): string => {
   const { width, height } = croppedImageSize(dimensions, crop)
 
@@ -291,12 +291,12 @@ export const buildRect = (
 export const buildQueryString = (
   params: Partial<{
     [K in keyof Omit<ImageQueryParams, "metadata">]: ImageQueryParams[K]
-  }>,
+  }>
 ): string => {
   const searchParams = new URLSearchParams(
     Object.entries(params)
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([key, value]) => [key, String(value)]),
+      .map(([key, value]) => [key, String(value)])
   )
 
   return searchParams.toString().replace(/%2C/g, ",") // don't urlencode commas

@@ -1,12 +1,13 @@
-export type {
-  Asset,
-  HotspotData,
-  CropData,
-  SanityImageProps,
-  WrapperProps,
-} from "./types"
-export { buildSrc, buildSrcSet } from "./urlBuilder"
+export {
+  type Asset,
+  type HotspotData,
+  type CropData,
+  buildSrc,
+  buildSrcSet,
+  parseImageId,
+  assetId,
+  normalizeAssetId,
+} from "@sanity-image/url-builder"
+export type { SanityImageProps, WrapperProps } from "./types"
 export { ImageWithPreview } from "./ImageWithPreview"
-export { parseImageId } from "./parseImageId"
-export { assetId, normalizeAssetId } from "./assetId"
 export { SanityImage } from "./SanityImage"

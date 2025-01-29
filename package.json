@@ -21,6 +21,9 @@
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0"
   },
+  "dependencies": {
+    "@sanity-image/url-builder": "workspace:*"
+  },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
     "@size-limit/preset-small-lib": "^8.2.4",
@@ -52,8 +55,10 @@
     "typescript-eslint": "^8.21.0"
   },
   "scripts": {
-    "build": "rimraf dist && node ./scripts/build.mjs && tsc -p tsconfig.build.json",
-    "postbuild": "./scripts/postbuild.sh",
+    "build": "pnpm build:url-builder && pnpm build:sanity-image",
+    "build:sanity-image": "rimraf dist && node ./scripts/build.mjs && tsc -p tsconfig.build.json",
+    "postbuild:sanity-image": "./scripts/postbuild.sh",
+    "build:url-builder": "pnpm --filter @sanity-image/url-builder run build",
     "size": "size-limit",
     "test": "jest",
     "test:generate-measurements": "yarn build && yarn node tests/buildTestCases.js",

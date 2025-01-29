@@ -1,0 +1,42 @@
+{
+  "name": "@sanity-image/url-builder",
+  "version": "1.0.0-alpha.0",
+  "author": "Corey Ward <corey@hey.com>",
+  "license": "MIT",
+  "repository": "https://github.com/coreyward/sanity-image",
+  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/mjs/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/mjs/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "/dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "rimraf dist && node scripts/build.mjs && tsc -p tsconfig.json",
+    "postbuild": "./scripts/postbuild.sh",
+    "size": "size-limit",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1",
+    "size-limit": "11.1.6",
+    "typescript": "^5.6.0"
+  },
+  "size-limit": [
+    {
+      "path": "dist/cjs/index.js",
+      "limit": "2 kB"
+    },
+    {
+      "path": "dist/mjs/index.js",
+      "limit": "2 kB"
+    }
+  ]
+}

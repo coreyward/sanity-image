@@ -1,5 +1,5 @@
 import assert from "assert"
-import { buildSrc } from "../src/urlBuilder"
+import { buildSrc } from "@sanity-image/url-builder"
 import { id, baseUrl, testCases, measurements } from "./imageOutputData.json"
 
 const measurementData = measurements as Record<

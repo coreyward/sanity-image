@@ -1,6 +1,6 @@
+import assert from "node:assert"
 import { cleanup, render } from "@testing-library/react"
 import { SanityImage } from "./SanityImage"
-import assert from "assert"
 
 afterEach(() => {
   cleanup()

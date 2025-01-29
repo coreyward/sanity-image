@@ -1,5 +1,9 @@
+import {
+  buildSrc,
+  buildSrcSet,
+  buildSvgAttributes,
+} from "@sanity-image/url-builder"
 import type { SanityImageProps } from "./types"
-import { buildSrc, buildSrcSet, buildSvgAttributes } from "./urlBuilder"
 import { ImageWithPreview } from "./ImageWithPreview"
 
 export const SanityImage = <T extends React.ElementType = "img">({
