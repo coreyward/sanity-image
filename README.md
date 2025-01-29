@@ -126,7 +126,8 @@ How it works at a glance:
   `width` and `height` attributes are set automatically to avoid layout shifts
 - A few image params are applied by default:
   - `auto=format` - Sanity will use AVIF images if they're supported by the
-    browser (https://www.sanity.io/help/avif) (note: if you specify `fm` manually, this won't be set)
+    browser (https://www.sanity.io/help/avif) (note: if you specify `fm`
+    manually, this won't be set)
   - `fit` - if the image aspect ratio isn't changed, this will be set to `max`;
     if the aspect ratio will change it's set to `crop`; you don't really need to
     worry about this though
@@ -222,8 +223,8 @@ userselect: none;
 
 ### Choosing the right `mode`
 
-If you are providing only one dimension (`width` or  `height`, but not both), it
-doesn't matter since the behavior will be the same. 
+If you are providing only one dimension (`width` or `height`, but not both), it
+doesn't matter since the behavior will be the same.
 
 - **Contain** mode will treat the dimensions you provide as boundaries, resizing
   the image to fit inside of them. The output image will match the aspect ratio
@@ -420,5 +421,5 @@ crop {
 
 ## License
 
-Copyright ©2023 Corey Ward. Available under the
+Copyright ©2023-2025 Corey Ward. Available under the
 [MIT License](https://github.com/coreyward/sanity-image/blob/main/LICENSE).
