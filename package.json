@@ -34,7 +34,7 @@
     "@types/probe-image-size": "^7.2.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.3.5",
-    "esbuild": "^0.24.2",
+    "esbuild": "^0.25.0",
     "eslint": "^9.18.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-react": "^7.32.2",
