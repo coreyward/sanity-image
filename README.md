@@ -196,16 +196,26 @@ start a discussion if you have questions or suggestions, or find me on the
 Sanity Slack!
 
 <details>
-  <summary><strong>⚠️ Minor gotchas with deferred loading</strong></summary>
+  <summary><strong>⚠️ “Help! My full-size image isn’t loading!"</strong></summary>
 
-`SanityImage` is relying on browser-native deferred image loading. This
-generally works fine in browsers that support it, but there are situations where
-the unloaded image is hidden or covered, resulting in the full image never
-loading.
+`SanityImage` is relying on browser-native deferred image loading. This relies
+on the `<img>` element being visible on the page to trigger loading
+automatically. If the image is hidden or covered by another element, it may
+never be loaded.
 
-If this happens, you can override the styles set on the full-size image using
-the `img[data-loading]` selector. This image sits immediately adjacent to the
-spaceball image and has the following default styles _while loading_:
+For example, if you are using `overflow: hidden` on a parent element, the image
+might be positioned in a way that it is not treated as visible by the browser.
+This can also happen if you have `display: none` on the image or a parent
+element, or if the image is positioned off-screen (e.g., in a carousel, or
+waiting for an animation to reveal it).
+
+Inspecting the DOM in your browser’s dev tools and checking the position of the
+`<img>` element with the `data-loading` attribute can help you identify the
+issue usually. Once you can identify the cause of the image being hidden, you
+can adjust the CSS styles on the `img[data-loading]` element to make it visible.
+
+For reference, the full-size image sits immediately adjacent to the preview
+image and has the following default styles _while loading_:
 
 ```css
 position: absolute;
