@@ -25,6 +25,7 @@
     "@sanity-image/url-builder": "workspace:*"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.0",
     "@eslint/js": "^9.18.0",
     "@size-limit/preset-small-lib": "^8.2.4",
     "@testing-library/dom": "^10.4.0",
