@@ -259,7 +259,7 @@ example for quick reference:
 
 ```tsx
 import * as React from "react"
-import { SanityImage, type WrapperPRops } from "sanity-image"
+import { SanityImage, type WrapperProps } from "sanity-image"
 
 export const Image = <T extends React.ElementType = "img">(
   props: WrapperProps<T>
