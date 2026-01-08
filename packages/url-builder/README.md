@@ -98,12 +98,14 @@ const srcSet = buildSrcSet({
 | ------------- | ------------------------------------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `id`          | string                                                       | Yes      | The Sanity Image ID (`_id` or `_ref` field value), e.g. `image-abcde12345-1200x800-jpg`                                                                                                                      |
 | `baseUrl`     | string                                                       | Yes      | The base URL for the Sanity image CDN, e.g. `https://cdn.sanity.io/images/project/dataset/`                                                                                                                  |
-| `width`       | number                                                       | No       | Target width in pixels. Used to determine dimensions of generated assets, not for layout. When provided, generates a reasonable srcSet based on this width.                                                  |
-| `height`      | number                                                       | No       | Target height in pixels. Used to determine dimensions of generated assets, not for layout. When provided with width, establishes target aspect ratio.                                                        |
-| `mode`        | "cover" \| "contain"                                         | No       | Defaults to "contain". `cover`: Crops image to match requested aspect ratio (based on width/height). `contain`: Fits image within boundaries without altering aspect ratio.                                  |
-| `hotspot`     | { x: number, y: number }                                     | No       | Coordinates for focal point when cropping. Values should be between 0-1 representing percentage across image.                                                                                                |
+| `width`       | number                                                       | No\*     | Target width in pixels. Used to determine dimensions of generated assets, not for layout. When provided, generates a reasonable srcSet based on this width.                                                  |
+| `height`      | number                                                       | No\*     | Target height in pixels. Used to determine dimensions of generated assets, not for layout. When provided with width, establishes target aspect ratio.                                                        |
+| `mode`        | "cover" \| "contain"                                         | No\*     | `cover`: Crops image to match requested aspect ratio (based on width/height).<br>`contain`: Fits image within boundaries without altering aspect ratio.<br>**Default value:** `contain`.                     |
 | `crop`        | { top: number, bottom: number, left: number, right: number } | No       | Crop coordinates. Values should be between 0-1 representing percentage to crop from each edge.                                                                                                               |
+| `hotspot`     | { x: number, y: number }                                     | No       | Coordinates for focal point when cropping. Values should be between 0-1 representing percentage across image.<br>**Note:** Only effective if `mode="cover"` and width & height params are provided to set aspect ratio. |
 | `queryParams` | object                                                       | No       | Additional Sanity Image API parameters like: `q` (Quality, defaults to 75), `blur` (Blur amount), `sharpen` (Sharpening amount), and other [Sanity Image API options](https://www.sanity.io/docs/image-urls) |
+
+\* Required if `hotspot` param is provided. If omitted, `hotspot` param may not have any effect.
 
 ## Examples
 
@@ -120,6 +122,10 @@ const { src } = buildSrc({
 
 ### Cropped Image with Hotspot
 
+1. The params `width` and `height` are required and must be provided to establish an aspect ratio.
+1. The param `mode` must be set to `cover` to crop to the established aspect ratio.
+1. Sanity Image Asset's `hotspot` object includes `width` and `height`. These are ignored by the builder if passed in — only `x` and `y` are used.
+
 ```typescript
 const { src } = buildSrc({
   id: "image-abc123-1000x1000-png",
@@ -127,6 +133,19 @@ const { src } = buildSrc({
   height: 300,
   mode: "cover",
   hotspot: { x: 0.25, y: 0.25 },
+  crop: { top: 0, bottom: 0.25, left: 0, right: 0.25 },
+  baseUrl: "/images/",
+})
+// => "/images/abc123-1000x1000.png?auto=format&fit=crop&fp-x=0.333&fp-y=0.333&h=300&q=75&rect=0,0,750,750&w=500"
+```
+
+### Cropped Image without Hotspot
+
+All optional parameters remain optional if `hotspot` is not provided.
+
+```typescript
+const { src } = buildSrc({
+  id: "image-abc123-1000x1000-png",
   crop: { top: 0, bottom: 0.25, left: 0, right: 0.25 },
   baseUrl: "/images/",
 })
