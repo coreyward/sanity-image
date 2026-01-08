@@ -149,7 +149,7 @@ const { src } = buildSrc({
   crop: { top: 0, bottom: 0.25, left: 0, right: 0.25 },
   baseUrl: "/images/",
 })
-// => "/images/abc123-1000x1000.png?auto=format&fit=crop&fp-x=0.333&fp-y=0.333&h=300&q=75&rect=0,0,750,750&w=500"
+// => "/images/abc123-1000x1000.png?auto=format&fit=max&q=75&rect=0,0,750,750&w=500"
 ```
 
 ### Responsive `srcSet`
