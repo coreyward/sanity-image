@@ -74,7 +74,7 @@ export type DirectQueryParams = {
   /**
    * Sharpen 0-100.
    */
-  sharpen?: number
+  sharp?: number
 }
 
 /**
