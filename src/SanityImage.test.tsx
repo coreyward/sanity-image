@@ -317,7 +317,7 @@ describe("custom query string params", () => {
           fm: "webp",
           q: 20,
           sat: -100,
-          sharpen: 42,
+          sharp: 42,
         }}
       />
     )
@@ -325,7 +325,7 @@ describe("custom query string params", () => {
     const { src } = getAttributes(baseElement)
 
     expect(src).toEqual(
-      "/images/abc123-1000x1000.jpg?blur=20&fit=max&flip=hv&fm=webp&q=20&sat=-100&sharpen=42&w=500"
+      "/images/abc123-1000x1000.jpg?blur=20&fit=max&flip=hv&fm=webp&q=20&sat=-100&sharp=42&w=500"
     )
   })
 })

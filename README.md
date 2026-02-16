@@ -93,7 +93,7 @@ const YourSweetComponent = ({ image }: ComponentProps) => (
     //
     // Have a burning desire to have Sanity change the format or something?
     // Most of the visual effects from the Sanity Image API are available:
-    queryParams={{ sharpen: 30, q: 80 }}
+    queryParams={{ sharp: 30, q: 80 }}
     //
     // Anything else you want to pass through to the img tag? Go for it!
     alt="Sweet Christmas!"
