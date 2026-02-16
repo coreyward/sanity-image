@@ -1,10 +1,13 @@
 {
   "extends": "./tsconfig",
+  "compilerOptions": {
+    "rootDir": "src"
+  },
   "exclude": [
     "**/*.test.*",
     "**/__mocks__/*",
     "**/__tests__/*",
     "examples/*",
-    "jest.config.ts"
+    "vitest.config.ts"
   ]
 }
