@@ -23,8 +23,8 @@ export type HotspotData = {
  */
 export type Asset = {
   _id: string
-  crop?: CropData
-  hotspot?: HotspotData
+  crop?: CropData | null
+  hotspot?: HotspotData | null
 }
 
 export type ImageIdParts = {
@@ -110,10 +110,10 @@ export type ImageQueryInputs = {
    * The hotspot coordinates to use for the image. Note: hotspot `width` and
    * `height` are not used.
    */
-  hotspot?: { x: number; y: number }
+  hotspot?: { x: number; y: number } | null
 
   /** The crop coordinates to use for the image. */
-  crop?: CropData
+  crop?: CropData | null
 
   /**
    * Query string params to pass to Sanity's image CDN directly. Note that this

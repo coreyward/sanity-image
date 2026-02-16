@@ -115,6 +115,23 @@ describe("buildSrcSet", () => {
     ])
   })
 
+  it("treats explicit null crop as no crop", () => {
+    expect(
+      buildSrcSet({
+        id: image.asset._id,
+        crop: null,
+        width: 500,
+        baseUrl,
+      })
+    ).toEqual(
+      buildSrcSet({
+        id: image.asset._id,
+        width: 500,
+        baseUrl,
+      })
+    )
+  })
+
   it("handles cover=mode", () => {
     expect(
       buildSrcSet({
@@ -388,6 +405,25 @@ describe("buildQueryParams", () => {
         q: 75,
         auto: "format",
       })
+    })
+
+    it("treats explicit null hotspot as no hotspot", () => {
+      expect(
+        buildQueryParams({
+          id: image.asset._id,
+          width: 375,
+          height: 100,
+          mode: "cover",
+          hotspot: null,
+        })
+      ).toEqual(
+        buildQueryParams({
+          id: image.asset._id,
+          width: 375,
+          height: 100,
+          mode: "cover",
+        })
+      )
     })
 
     it("hotspot compensates for crop input", () => {
