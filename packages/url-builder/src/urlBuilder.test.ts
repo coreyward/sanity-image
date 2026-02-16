@@ -596,7 +596,7 @@ describe("buildQueryParams", () => {
             fm: "webp",
             q: 20,
             sat: -100,
-            sharpen: 42,
+            sharp: 42,
           },
         })
       ).toEqual({
@@ -606,7 +606,7 @@ describe("buildQueryParams", () => {
         fm: "webp",
         q: 20,
         sat: -100,
-        sharpen: 42,
+        sharp: 42,
         w: 500,
       })
     })
