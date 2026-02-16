@@ -22,7 +22,7 @@
     "build": "rimraf dist && node scripts/build.mjs && tsc -p tsconfig.json",
     "postbuild": "./scripts/postbuild.sh",
     "size": "size-limit",
-    "test": "jest"
+    "test": "vitest run"
   },
   "devDependencies": {
     "rimraf": "^6.0.1",

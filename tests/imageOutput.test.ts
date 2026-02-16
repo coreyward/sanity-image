@@ -1,4 +1,5 @@
 import assert from "assert"
+import { expect, test } from "vitest"
 import { buildSrc } from "@sanity-image/url-builder"
 import { id, baseUrl, testCases, measurements } from "./imageOutputData.json"
 

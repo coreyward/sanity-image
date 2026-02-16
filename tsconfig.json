@@ -1,6 +1,6 @@
 {
   "include": [
-    "jest.config.ts",
+    "vitest.config.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
     "tests/**/*.ts",
@@ -33,7 +33,7 @@
     "noUnusedLocals": true,
     "strict": true,
     "target": "ES2022",
-    "types": ["node", "jest"],
+    "types": ["node"],
     "useUnknownInCatchVariables": true
   }
 }

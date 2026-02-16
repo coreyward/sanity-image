@@ -1,5 +1,14 @@
 import assert from "node:assert"
 import { cleanup, render } from "@testing-library/react"
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest"
 import { SanityImage } from "./SanityImage"
 
 afterEach(() => {
@@ -198,22 +207,18 @@ describe("with preview", () => {
 })
 
 describe("cursed situations", () => {
-  let consoleErrorFn: jest.SpyInstance<
-    void,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [message?: any, ...optionalParams: any[]],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    any
-  >
+  const onError = (e: ErrorEvent) => e.preventDefault()
 
   beforeAll(() => {
-    consoleErrorFn = jest
-      .spyOn(console, "error")
-      .mockImplementation(() => jest.fn())
+    vi.spyOn(console, "error").mockImplementation(() => {
+      // Noop
+    })
+    window.addEventListener("error", onError)
   })
 
   afterAll(() => {
-    consoleErrorFn?.mockRestore()
+    vi.mocked(console.error).mockRestore()
+    window.removeEventListener("error", onError)
   })
 
   it("throws if no id is provided", () => {

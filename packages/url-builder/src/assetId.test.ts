@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest"
 import { assetId, normalizeAssetId } from "./assetId"
 
 describe("assetId", () => {

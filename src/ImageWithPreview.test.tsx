@@ -1,5 +1,6 @@
 import React from "react"
 import { render, fireEvent } from "@testing-library/react"
+import { describe, expect, it } from "vitest"
 import { ImageWithPreview } from "./ImageWithPreview"
 
 const getImages = (container: HTMLElement) => container.querySelectorAll("img")
