@@ -5,13 +5,13 @@
   "license": "MIT",
   "repository": "https://github.com/coreyward/sanity-image",
   "types": "dist/index.d.ts",
-  "main": "dist/cjs/index.js",
-  "module": "dist/mjs/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/mjs/index.js",
-      "require": "./dist/cjs/index.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     }
   },
   "files": [
@@ -19,23 +19,22 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "rimraf dist && node scripts/build.mjs && tsc -p tsconfig.json",
-    "postbuild": "./scripts/postbuild.sh",
+    "build": "tsup",
     "size": "size-limit",
     "test": "vitest run"
   },
   "devDependencies": {
-    "rimraf": "^6.1.3",
     "size-limit": "^12.0.0",
+    "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
   "size-limit": [
     {
-      "path": "dist/cjs/index.js",
+      "path": "dist/index.js",
       "limit": "2 kB"
     },
     {
-      "path": "dist/mjs/index.js",
+      "path": "dist/index.mjs",
       "limit": "2 kB"
     }
   ]

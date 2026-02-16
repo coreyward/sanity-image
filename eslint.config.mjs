@@ -25,9 +25,9 @@ export default tseslint.config(
       parserOptions: {
         projectService: {
           allowDefaultProject: [
-            "scripts/build.mjs",
-            "packages/*/scripts/build.mjs",
             "eslint.config.mjs",
+            "tsup.config.ts",
+            "packages/*/tsup.config.ts",
           ],
         },
       },

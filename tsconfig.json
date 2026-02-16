@@ -11,8 +11,8 @@
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "allowJs": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
+    "declaration": false,
+    "noEmit": true,
     "esModuleInterop": true,
     "exactOptionalPropertyTypes": false,
     "forceConsistentCasingInFileNames": true,
@@ -27,7 +27,6 @@
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
     "strictPropertyInitialization": true,
-    "outDir": "dist",
     "resolveJsonModule": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
