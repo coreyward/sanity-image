@@ -49,9 +49,10 @@ export const SanityImage = <T extends React.ElementType = "img">({
   const ImageComponent =
     preview && !isSvg ? ImageWithPreview : (component ?? "img")
 
+  const isSourceElement = component === "source"
+
   const componentProps: Record<string, unknown> = {
-    alt: rest.alt ?? "",
-    loading: rest.loading ?? "lazy",
+    ...(!isSourceElement && { alt: rest.alt ?? "", loading: rest.loading ?? "lazy" }),
     id: htmlId,
     ...rest,
   }
@@ -67,7 +68,7 @@ export const SanityImage = <T extends React.ElementType = "img">({
 
     // If this is a <source> element, we need to set the `srcSet` attribute and not
     // the `src` attribute, otherwise it will be ignored in <picture> elements.
-    if (component === "source") {
+    if (isSourceElement) {
       baseAttributes.srcSet = baseAttributes.src
       delete baseAttributes.src
     }
