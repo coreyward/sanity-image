@@ -302,6 +302,37 @@ describe("svg source image", () => {
     expect(source?.getAttribute("src")).toBeNull()
     expect(source?.getAttribute("srcset")).toBe("/images/abc123-300x100.svg")
   })
+
+  it("omits alt and loading when used as source element", () => {
+    const svgId = "image-abc123-300x100-svg"
+
+    const { baseElement } = render(
+      <SanityImage
+        as="source"
+        id={svgId}
+        width={2000}
+        height={1000}
+        baseUrl={baseUrl}
+      />
+    )
+
+    const source = baseElement.querySelector("source")
+    expect(source?.getAttribute("alt")).toBeNull()
+    expect(source?.getAttribute("loading")).toBeNull()
+  })
+})
+
+describe("as source element", () => {
+  it("omits alt and loading attributes", () => {
+    const { baseElement } = render(
+      <SanityImage as="source" id={id} width={500} baseUrl={baseUrl} />
+    )
+
+    const source = baseElement.querySelector("source")
+    expect(source).toBeTruthy()
+    expect(source?.getAttribute("alt")).toBeNull()
+    expect(source?.getAttribute("loading")).toBeNull()
+  })
 })
 
 describe("custom query string params", () => {
