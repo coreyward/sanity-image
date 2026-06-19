@@ -1,6 +1,7 @@
 {
   "name": "sanity-image",
   "version": "1.1.0",
+  "description": "A well-considered React component for displaying images from Sanity with automatic srcSet generation, hotspot/crop support, and more.",
   "author": "Corey Ward <corey@hey.com>",
   "license": "MIT",
   "repository": "https://github.com/coreyward/sanity-image",
