@@ -31,7 +31,7 @@
     "@size-limit/preset-small-lib": "^12.0.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
-    "@types/node": "^20.19.33",
+    "@types/node": "^22.10.2",
     "@types/probe-image-size": "^7.2.5",
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
@@ -61,7 +61,7 @@
     "lint": "eslint src/**/*{.ts,.tsx}"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=22"
   },
   "size-limit": [
     {
