@@ -49,7 +49,7 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.0",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.11"
   },
   "scripts": {
     "build": "pnpm build:url-builder && pnpm build:sanity-image",
