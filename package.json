@@ -56,7 +56,10 @@
     "test:coverage": "vitest run --coverage",
     "test:generate-measurements": "pnpm build && node tests/buildTestCases.mjs",
     "lint": "oxlint --type-aware",
-    "lint:fix": "oxlint --type-aware --fix"
+    "lint:fix": "oxlint --type-aware --fix",
+    "typecheck": "pnpm typecheck:url-builder && pnpm typecheck:sanity-image",
+    "typecheck:sanity-image": "tsc --noEmit",
+    "typecheck:url-builder": "pnpm --filter @sanity-image/url-builder run typecheck"
   },
   "engines": {
     "node": ">=22"
