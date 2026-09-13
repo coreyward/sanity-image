@@ -5,14 +5,15 @@
   "author": "Corey Ward <corey@hey.com>",
   "license": "MIT",
   "repository": "https://github.com/coreyward/sanity-image",
+  "type": "module",
   "types": "dist/index.d.ts",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "files": [
@@ -51,7 +52,7 @@
     "build:url-builder": "pnpm --filter @sanity-image/url-builder run build",
     "size": "size-limit",
     "test": "vitest run",
-    "test:generate-measurements": "yarn build && yarn node tests/buildTestCases.js",
+    "test:generate-measurements": "pnpm build && node tests/buildTestCases.mjs",
     "lint": "oxlint --type-aware",
     "lint:fix": "oxlint --type-aware --fix"
   },
@@ -60,11 +61,11 @@
   },
   "size-limit": [
     {
-      "path": "dist/index.js",
+      "path": "dist/index.cjs",
       "limit": "4 kB"
     },
     {
-      "path": "dist/index.mjs",
+      "path": "dist/index.js",
       "limit": "3 kB"
     }
   ],

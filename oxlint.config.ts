@@ -56,7 +56,7 @@ export default defineConfig({
     "dist",
     "packages/*/dist",
     "examples",
-    "tests/buildTestCases.js",
+    "tests/buildTestCases.mjs",
   ],
   overrides: [
     {

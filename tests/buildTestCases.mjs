@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const probe = require("probe-image-size")
-const { buildSrc } = require("../dist/cjs/index")
-const fs = require("fs")
-const path = require("path")
-const assert = require("assert")
+import assert from "node:assert"
+import fs from "node:fs"
+import path from "node:path"
+import probe from "probe-image-size"
+import { buildSrc } from "@sanity-image/url-builder"
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname)
 
 if (!process.env.DATASET || !process.env.PROJECT_ID) {
   throw new Error(
