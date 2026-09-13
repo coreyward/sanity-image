@@ -34,6 +34,7 @@
     "@types/probe-image-size": "^7.2.5",
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
+    "@vitest/coverage-v8": "^5.0.0",
     "oxlint": "^1.82.0",
     "oxlint-tsgolint": "^7.0.2001",
     "prettier": "^3.8.1",
@@ -52,6 +53,7 @@
     "build:url-builder": "pnpm --filter @sanity-image/url-builder run build",
     "size": "size-limit",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:generate-measurements": "pnpm build && node tests/buildTestCases.mjs",
     "lint": "oxlint --type-aware",
     "lint:fix": "oxlint --type-aware --fix"

@@ -53,6 +53,7 @@ export default defineConfig({
     ],
   },
   ignorePatterns: [
+    "coverage",
     "dist",
     "packages/*/dist",
     "examples",
