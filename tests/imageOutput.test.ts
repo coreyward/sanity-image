@@ -1,7 +1,7 @@
 import assert from "assert"
 import { expect, test } from "vitest"
 import { buildSrc } from "@sanity-image/url-builder"
-import { id, baseUrl, testCases, measurements } from "./imageOutputData.json"
+import { baseUrl, id, measurements, testCases } from "./imageOutputData.json"
 
 const measurementData = measurements as Record<
   string,
@@ -36,10 +36,10 @@ const measurementData = measurements as Record<
  *
  */
 
-test.each(testCases)(".verifyOutput(%o)", async ({ width, height, crop }) => {
-  assert(typeof width === "number" || width === undefined)
-  assert(typeof height === "number" || height === undefined)
-  assert(typeof crop === "object" || crop === undefined)
+test.each(testCases)(".verifyOutput(%o)", ({ width, height, crop }) => {
+  assert.ok(typeof width === "number" || width === undefined)
+  assert.ok(typeof height === "number" || height === undefined)
+  assert.ok(typeof crop === "object" || crop === undefined)
 
   const { src, ...expectedDimensions } = buildSrc({
     baseUrl,

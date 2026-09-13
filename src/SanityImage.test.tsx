@@ -1,3 +1,4 @@
+// oxlint-disable jsx-a11y/alt-text
 import assert from "node:assert"
 import { cleanup, render } from "@testing-library/react"
 import {
@@ -24,7 +25,10 @@ const preview =
  * Gets the first element rendered in the default containers
  */
 const getTarget = (element: HTMLElement) => {
-  assert(element.firstElementChild?.firstElementChild, "element does not exist")
+  assert.ok(
+    element.firstElementChild?.firstElementChild,
+    "element does not exist"
+  )
 
   return element.firstElementChild.firstElementChild
 }
@@ -207,7 +211,9 @@ describe("with preview", () => {
 })
 
 describe("cursed situations", () => {
-  const onError = (e: ErrorEvent) => e.preventDefault()
+  const onError = (e: ErrorEvent) => {
+    e.preventDefault()
+  }
 
   beforeAll(() => {
     vi.spyOn(console, "error").mockImplementation(() => {

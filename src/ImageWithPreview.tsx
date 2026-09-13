@@ -34,7 +34,7 @@ export const ImageWithPreview = <T extends React.ElementType = "img">({
       {!loaded && (
         <Img
           src={preview}
-          alt={loaded ? "" : alt}
+          alt={alt}
           id={props.id}
           className={props.className}
           width={props.width}

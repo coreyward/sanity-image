@@ -13,19 +13,19 @@ describe("parseImageId", () => {
   it("throws an error if the image id is invalid", () => {
     expect(() => {
       parseImageId("image-abcd1234-100x2000")
-    }).toThrowError('Could not parse image ID "image-abcd1234-100x2000"')
+    }).toThrow('Could not parse image ID "image-abcd1234-100x2000"')
     expect(() => {
       parseImageId("image-abcd1234-100x2000-")
-    }).toThrowError('Could not parse image ID "image-abcd1234-100x2000-"')
+    }).toThrow('Could not parse image ID "image-abcd1234-100x2000-"')
     expect(() => {
       parseImageId("abcd1234-100x2000.jpg")
-    }).toThrowError('Could not parse image ID "abcd1234-100x2000.jpg"')
+    }).toThrow('Could not parse image ID "abcd1234-100x2000.jpg"')
   })
 
   it("throws an error if the dimensions are invalid", () => {
     expect(() => {
       parseImageId("image-abcd1234-100x0-jpg")
-    }).toThrowError('Invalid dimensions "100x0"')
+    }).toThrow('Invalid dimensions "100x0"')
   })
 })
 

@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest"
 import {
-  buildSrcSet,
   buildQueryParams,
   buildQueryString,
   buildRect,
-  croppedImageSize,
   buildSrc,
+  buildSrcSet,
+  croppedImageSize,
 } from "./urlBuilder"
 
 const image = {
@@ -695,7 +695,7 @@ describe("buildRect", () => {
         { width: 2000, height: 1000 },
         { top: 100, left: 200, right: 500, bottom: 1000 }
       )
-    ).toThrowError()
+    ).toThrow()
   })
 
   it("rounds values", () => {

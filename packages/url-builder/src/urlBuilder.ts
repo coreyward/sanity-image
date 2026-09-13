@@ -57,7 +57,9 @@ export const buildSrcSet = ({
       const computedHeight = h && Math.round(h * multiple)
 
       // Ignore tiny entries; the extra data in the HTML is almost never worth it
-      if (multiple < 1 && computedWidth < 50) return null
+      if (multiple < 1 && computedWidth < 50) {
+        return null
+      }
 
       const params: Omit<ImageQueryParams, "metadata"> = buildQueryParams({
         id,
@@ -192,7 +194,9 @@ export const buildQueryParams = ({
   }
 
   // If an explicit format has not been requested, use auto format
-  if (!params.fm) params.auto = "format"
+  if (!params.fm) {
+    params.auto = "format"
+  }
 
   if (crop) {
     // Convert crop to rect param)
@@ -299,5 +303,5 @@ export const buildQueryString = (
       .map(([key, value]) => [key, String(value)])
   )
 
-  return searchParams.toString().replace(/%2C/g, ",") // don't urlencode commas
+  return searchParams.toString().replaceAll("%2C", ",") // don't urlencode commas
 }

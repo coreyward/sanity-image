@@ -26,8 +26,6 @@
     "@sanity-image/url-builder": "workspace:*"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.3",
-    "@eslint/js": "^9.39.2",
     "@size-limit/preset-small-lib": "^12.0.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
@@ -35,11 +33,8 @@
     "@types/probe-image-size": "^7.2.5",
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
-    "eslint": "^9.39.2",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "globals": "^15.15.0",
+    "oxlint": "^1.82.0",
+    "oxlint-tsgolint": "^7.0.2001",
     "prettier": "^3.8.1",
     "probe-image-size": "^7.2.3",
     "react": "^18.3.1",
@@ -48,7 +43,6 @@
     "size-limit": "^12.0.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.0",
     "vitest": "^4.1.11"
   },
   "scripts": {
@@ -58,7 +52,8 @@
     "size": "size-limit",
     "test": "vitest run",
     "test:generate-measurements": "yarn build && yarn node tests/buildTestCases.js",
-    "lint": "eslint src/**/*{.ts,.tsx}"
+    "lint": "oxlint --type-aware",
+    "lint:fix": "oxlint --type-aware --fix"
   },
   "engines": {
     "node": ">=22"

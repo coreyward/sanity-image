@@ -36,11 +36,14 @@ export const SanityImage = <T extends React.ElementType = "img">({
   // Any remaining props are passed through to the rendered component
   ...rest
 }: SanityImageProps<T>) => {
-  if (!id) throw new Error("Missing required `id` prop for <SanityImage>.")
-  if (!baseUrl && (!projectId || !dataset))
+  if (!id) {
+    throw new Error("Missing required `id` prop for <SanityImage>.")
+  }
+  if (!baseUrl && (!projectId || !dataset)) {
     throw new Error(
       "Missing required `baseUrl` or `projectId` and `dataset` props for <SanityImage>."
     )
+  }
 
   baseUrl = baseUrl ?? `https://cdn.sanity.io/images/${projectId}/${dataset}/`
 
@@ -52,7 +55,10 @@ export const SanityImage = <T extends React.ElementType = "img">({
   const isSourceElement = component === "source"
 
   const componentProps: Record<string, unknown> = {
-    ...(!isSourceElement && { alt: rest.alt ?? "", loading: rest.loading ?? "lazy" }),
+    ...(!isSourceElement && {
+      alt: rest.alt ?? "",
+      loading: rest.loading ?? "lazy",
+    }),
     id: htmlId,
     ...rest,
   }

@@ -1,5 +1,6 @@
+// oxlint-disable jsx-a11y/alt-text
 import React from "react"
-import { render, fireEvent } from "@testing-library/react"
+import { fireEvent, render } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 import { ImageWithPreview } from "./ImageWithPreview"
 
