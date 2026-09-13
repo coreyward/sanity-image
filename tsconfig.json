@@ -28,6 +28,7 @@
     "strictBindCallApply": true,
     "strictPropertyInitialization": true,
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "strict": true,
