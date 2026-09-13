@@ -43,13 +43,13 @@
     "react-dom": "^18.3.1",
     "react-test-renderer": "^18.3.1",
     "size-limit": "^12.0.0",
-    "tsup": "^8.5.1",
+    "tsdown": "^0.23.0",
     "typescript": "^6.0.0",
     "vitest": "^5.0.0"
   },
   "scripts": {
     "build": "pnpm build:url-builder && pnpm build:sanity-image",
-    "build:sanity-image": "tsup",
+    "build:sanity-image": "tsdown",
     "build:url-builder": "pnpm --filter @sanity-image/url-builder run build",
     "size": "size-limit",
     "test": "vitest run",
