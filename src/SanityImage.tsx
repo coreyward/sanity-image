@@ -100,6 +100,18 @@ export const SanityImage = <T extends React.ElementType = "img">({
   componentProps.width = htmlWidth ?? outputDimensions.width
   componentProps.height = htmlHeight ?? outputDimensions.height
 
+  // Let the browser pick a srcSet candidate from the rendered width of lazy
+  // images when no `sizes` was given. This is skipped for previews because the
+  // full image is rendered at 10px wide while loading, which would cause the
+  // browser to select the smallest candidate.
+  if (
+    !preview &&
+    componentProps.loading === "lazy" &&
+    componentProps.sizes === undefined
+  ) {
+    componentProps.sizes = "auto"
+  }
+
   if (preview) {
     componentProps.as = component ?? "img"
     componentProps.preview = preview

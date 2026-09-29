@@ -130,6 +130,36 @@ describe("without preview", () => {
     expect(loading).toBe("eager")
   })
 
+  it("sets sizes to auto for lazy images without sizes", () => {
+    const { baseElement } = render(
+      <SanityImage id={id} width={500} baseUrl={baseUrl} />
+    )
+
+    const { sizes } = getAttributes(baseElement, ["sizes"])
+
+    expect(sizes).toBe("auto")
+  })
+
+  it("does not override a provided sizes value", () => {
+    const { baseElement } = render(
+      <SanityImage id={id} width={500} baseUrl={baseUrl} sizes="50vw" />
+    )
+
+    const { sizes } = getAttributes(baseElement, ["sizes"])
+
+    expect(sizes).toBe("50vw")
+  })
+
+  it("does not set sizes for eager images", () => {
+    const { baseElement } = render(
+      <SanityImage id={id} width={500} baseUrl={baseUrl} loading="eager" />
+    )
+
+    const { sizes } = getAttributes(baseElement, ["sizes"])
+
+    expect(sizes).toBeNull()
+  })
+
   it("works with projectId and dataset", () => {
     const { baseElement } = render(
       <SanityImage
@@ -193,6 +223,16 @@ describe("with preview", () => {
     )
 
     expect(baseElement).toMatchSnapshot()
+  })
+
+  it("does not set sizes to auto", () => {
+    const { baseElement } = render(
+      <SanityImage id={id} width={500} baseUrl={baseUrl} preview={preview} />
+    )
+
+    for (const img of baseElement.querySelectorAll("img")) {
+      expect(img.getAttribute("sizes")).toBeNull()
+    }
   })
 
   it("merges `style` prop with default styles", () => {
@@ -338,6 +378,15 @@ describe("as source element", () => {
     expect(source).toBeTruthy()
     expect(source?.getAttribute("alt")).toBeNull()
     expect(source?.getAttribute("loading")).toBeNull()
+  })
+
+  it("does not set sizes to auto", () => {
+    const { baseElement } = render(
+      <SanityImage as="source" id={id} width={500} baseUrl={baseUrl} />
+    )
+
+    const source = baseElement.querySelector("source")
+    expect(source?.getAttribute("sizes")).toBeNull()
   })
 })
 

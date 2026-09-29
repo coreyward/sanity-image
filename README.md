@@ -135,6 +135,13 @@ How it works at a glance:
     `queryParams` prop
 - The `loading` attribute will be set to `lazy` if it isn't supplied; use
   `loading="eager"` for images above the fold
+- If `sizes` isn't supplied and the image is lazy loaded, `sizes="auto"` is set
+  so [supporting browsers](https://caniuse.com/mdn-html_elements_img_sizes_auto)
+  can pick a `srcSet` candidate based on the rendered width of the image (other
+  browsers fall back to `100vw`, the same as omitting `sizes`). This is skipped
+  when a `preview` is passed, since the full image is hidden at a tiny size
+  while it loads. Pass your own `sizes` value for eager images, or when you want
+  more control
 - The `alt` attribute will be set to an empty string if it isn't supplied; set
   it if it isn't a decorative image!
 - By default it renders an `img` tag (two if you pass in a `preview`), but you
